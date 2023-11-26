@@ -1,25 +1,83 @@
-<?php require_once 'views/layout/head.php'; ?>
+<!DOCTYPE html>
+<html lang="en">
 
-<link rel="stylesheet" href="<?= URL ?>/public/css/style.css">
+<head>
+	<meta charset="UTF-8">
+	<meta content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no" name="viewport">
+	<title>Otika - Admin Dashboard Template</title>
+	<!-- General CSS Files -->
+	<link rel="stylesheet" href="<?= URL ?>/public/css/app.min.css">
+	<link rel="stylesheet" href="<?= URL ?>/public/bundles/bootstrap-social/bootstrap-social.css">
+	<!-- Template CSS -->
+	<link rel="stylesheet" href="<?= URL ?>/public/css/style.css">
+	<link rel="stylesheet" href="<?= URL ?>/public/css/components.css">
+	<!-- Custom style CSS -->
+	<link rel="stylesheet" href="<?= URL ?>/public/css/custom.css">
+	<link rel='shortcut icon' type='image/x-icon' href='<?= URL ?>/public/img/favicon.ico' />
+</head>
 
-<?php require_once 'views/layout/header.php'; ?>
+<body>
+	<div id="app">
+		<section class="section">
+			<div class="container mt-5 pt-5">
+				<div class="row">
+					<div class="col-12 col-sm-8 offset-sm-2 col-md-6 offset-md-3 col-lg-6 offset-lg-3 col-xl-4 offset-xl-4">
+						<div class="card card-primary">
+							<div class="card-header">
+								<h4>Login</h4>
+							</div>
+							<div class="card-body">
+								<div class="mb-2"><?php $this->showMessages() ?></div>
 
-<div>
-	<?= $this->showMessages() ?>
+								<form method="POST" action="login/auth" class="needs-validation" novalidate="">
+									<div class="form-group">
+										<label for="email">Email</label>
+										<input id="email" type="email" class="form-control" name="email" tabindex="1" required autofocus>
+										<div class="invalid-feedback">
+											Please fill in your email
+										</div>
+									</div>
+									<div class="form-group">
+										<label for="password" class="control-label">Password</label>
+										<div class="d-none">
+											<div class="float-right">
+												<a href="auth-forgot-password.html" class="text-small">
+													Forgot Password?
+												</a>
+											</div>
+										</div>
+										<input id="password" type="password" class="form-control" name="password" tabindex="2" required>
+										<div class="invalid-feedback">
+											please fill in your password
+										</div>
+									</div>
+									<div class="form-group">
+										<button type="submit" class="btn btn-primary btn-lg btn-block" tabindex="4">
+											Login
+										</button>
+									</div>
+								</form>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+	</div>
+	<!-- General JS Scripts -->
+	<script src="<?= URL ?>/public/js/app.min.js"></script>
 
-	<form action="<?= URL ?>/login/auth" method="post">
-		<div>
-			<input type="email" placeholder="Correo" name="email" required>
-		</div>
-		<div>
-			<input type="password" placeholder="Contraseña" name="password" required>
-		</div>
-		<div>
-			<button type="submit">Iniciar Sesión</button>
-		</div>
-	</form>
-</div>
+	<!-- Template JS File -->
+	<script src="<?= URL ?>/public/js/scripts.js"></script>
 
-<?php require_once 'views/layout/foot.php'; ?>
+	<script>
+		$(document).ready(function() {
+			$('body').removeClass('dark');
+			$('body').removeClass('dark-sidebar');
+			$('body').removeClass('theme-black');
+			$('body').addClass('light');
+		});
+	</script>
+</body>
 
-<?php require_once 'views/layout/footer.php'; ?>
+</html>
