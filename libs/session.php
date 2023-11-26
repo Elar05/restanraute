@@ -40,7 +40,7 @@ class Session extends Controller
         'login',
       ],
       "1" => [
-        'main', 'logout', 'user',
+        'main', 'logout', 'usuario',
       ],
       "2" => [
         'main', 'logout',
@@ -74,9 +74,9 @@ class Session extends Controller
 
   public function initialize($user)
   {
-    $_SESSION["userId"] = $user['id'];
-    $_SESSION["userType"] = $user['idtype'];
-    $_SESSION["user"] = $user['names'];
+    $_SESSION["userId"] = $user['idUsuario'];
+    $_SESSION["userType"] = $user['idtipo'];
+    $_SESSION["user"] = $user['nombres'];
 
     $this->redirect($this->defaultSite);
     // $this->redirect($this->sites[$_SESSION["userType"]]['default']);

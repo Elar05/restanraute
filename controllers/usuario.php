@@ -1,7 +1,9 @@
 <?php
 
+namespace Controllers;
+
 use Libs\Session;
-use Models\UserModel;
+use Models\UsuarioModel;
 
 class User extends Session
 {
@@ -10,7 +12,7 @@ class User extends Session
   public function __construct($url)
   {
     parent::__construct($url);
-    $this->model = new UserModel;
+    $this->model = new UsuarioModel();
   }
 
   public function render()

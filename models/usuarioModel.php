@@ -6,7 +6,7 @@ use PDO;
 use PDOException;
 use Libs\Model;
 
-class UserModel extends Model
+class UsuarioModel extends Model
 {
   public $id;
   public $names;
@@ -22,7 +22,7 @@ class UserModel extends Model
   public function get($id, $colum = "id")
   {
     try {
-      $query = $this->prepare("SELECT * FROM users WHERE $colum = ?;");
+      $query = $this->prepare("SELECT * FROM usuario WHERE $colum = ?;");
       $query->execute([$id]);
       return $query->fetch(PDO::FETCH_ASSOC);
     } catch (PDOException $e) {
@@ -37,7 +37,7 @@ class UserModel extends Model
       $sql = "";
       if ($colum !== null) $sql = " WHERE $colum = '$value'";
 
-      $query = $this->query("SELECT * FROM users $sql;");
+      $query = $this->query("SELECT * FROM usuario $sql;");
       $query->execute();
       return $query->fetchAll(PDO::FETCH_ASSOC);
     } catch (PDOException $e) {
@@ -49,7 +49,7 @@ class UserModel extends Model
   public function save()
   {
     try {
-      $query = $this->prepare("INSERT INTO users(names, phone, email, password) VALUES (:names, :phone, :email, :password);");
+      $query = $this->prepare("INSERT INTO usuario(names, phone, email, password) VALUES (:names, :phone, :email, :password);");
 
       $query->bindParam(':names', $this->names, PDO::PARAM_STR);
       $query->bindParam(':phone', $this->phone, PDO::PARAM_STR);
@@ -66,7 +66,7 @@ class UserModel extends Model
   public function update()
   {
     try {
-      $query = $this->prepare("UPDATE users SET names = :names, phone = :phone, email = :email, password = :password WHERE id = :id;");
+      $query = $this->prepare("UPDATE usuario SET names = :names, phone = :phone, email = :email, password = :password WHERE id = :id;");
 
       return $query->execute([
         'id' => $this->id,
@@ -84,7 +84,7 @@ class UserModel extends Model
   public function updatePassword()
   {
     try {
-      $query = $this->prepare("UPDATE users SET password = :password WHERE id = :id;");
+      $query = $this->prepare("UPDATE usuario SET password = :password WHERE id = :id;");
 
       return $query->execute([
         'id' => $this->id,
@@ -99,7 +99,7 @@ class UserModel extends Model
   public function delete($id)
   {
     try {
-      $query = $this->prepare("DELETE FROM users WHERE id = ?;");
+      $query = $this->prepare("DELETE FROM usuario WHERE id = ?;");
       $query->execute([$id]);
       return true;
     } catch (PDOException $e) {

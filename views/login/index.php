@@ -29,7 +29,7 @@
 							<div class="card-body">
 								<div class="mb-2"><?php $this->showMessages() ?></div>
 
-								<form method="POST" action="login/auth" class="needs-validation" novalidate="">
+								<form method="POST" action="<?= URL ?>/login/auth" class="needs-validation" novalidate="">
 									<div class="form-group">
 										<label for="email">Email</label>
 										<input id="email" type="email" class="form-control" name="email" tabindex="1" required autofocus>

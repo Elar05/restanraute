@@ -2,8 +2,10 @@
 
 <?php require_once 'views/layout/header.php'; ?>
 
-<div>
-  <h1>Contenido</h1>
+<div class="main-content">
+  <section class="section">
+    <h1>Contenido</h1>
+  </section>
 </div>
 
 <?php require_once 'views/layout/foot.php'; ?>

@@ -1,5 +1,7 @@
 <?php
 
+namespace Controllers;
+
 use Libs\Session;
 
 class Main extends Session

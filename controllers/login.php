@@ -1,5 +1,7 @@
 <?php
 
+namespace Controllers;
+
 use Models\LoginModel;
 use Libs\Session;
 use Libs\Errors;
