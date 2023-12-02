@@ -71,6 +71,7 @@ function loadTable() {
       function (data, textStatus, jqXHR) {
         if ("cliente" in data) {
           $("#idcliente").val(data.cliente.idCliente);
+          $("#documento").val(data.cliente.documento);
           $("#nombres").val(data.cliente.nombres);
           $("#email").val(data.cliente.email);
           $("#telefono").val(data.cliente.telefono);
