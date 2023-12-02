@@ -2,12 +2,18 @@
 
 namespace Controllers;
 
-use Libs\Controller;
+use Libs\Session;
 
-class Categoria extends Controller
+class Categoria extends Session
 {
-  public function __construct()
+  public function __construct($url)
   {
-    parent::__construct("", "");
+    parent::__construct($url);
+
   }
+  public function render()
+  {
+    $this->view->render('categoria/index');
+  }
+
 }

@@ -40,7 +40,7 @@ class Session extends Controller
         'login',
       ],
       "1" => [
-        'main', 'logout', 'usuario',
+        'main', 'logout', 'usuario', 'categoria',
       ],
       "2" => [
         'main', 'logout',
