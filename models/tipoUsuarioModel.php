@@ -8,6 +8,10 @@ use PDOException;
 
 class TipoUsuarioModel extends Model
 {
+  public $idTipo;
+  public $nombre;
+  public $estado;
+
   public function __construct()
   {
     parent::__construct();
@@ -16,7 +20,7 @@ class TipoUsuarioModel extends Model
   public function get($id, $column = 'id')
   {
     try {
-      $query = $this->prepare("SELECT * FROM usuario_tipos WHERE $column = ?;");
+      $query = $this->prepare("SELECT * FROM tipousuario WHERE $column = ?;");
       $query->execute([$id]);
       return $query->fetch(PDO::FETCH_ASSOC);
     } catch (PDOException $e) {
@@ -28,7 +32,7 @@ class TipoUsuarioModel extends Model
   public function getAll()
   {
     try {
-      $query = $this->query("SELECT * FROM usuario_tipos;");
+      $query = $this->query("SELECT * FROM tipousuario;");
       $query->execute();
       return $query->fetchAll(PDO::FETCH_ASSOC);
     } catch (PDOException $e) {
@@ -37,11 +41,11 @@ class TipoUsuarioModel extends Model
     }
   }
 
-  public function save($tipo)
+  public function save()
   {
     try {
-      $query = $this->prepare("INSERT INTO usuario_tipos (tipo) VALUES (:tipo);");
-      $query->bindParam(':tipo', $tipo, PDO::PARAM_STR);
+      $query = $this->prepare("INSERT INTO tipousuario (nombre) VALUES (:nombre);");
+      $query->bindValue(':nombre', $this->nombre, PDO::PARAM_STR);
       return $query->execute();
     } catch (PDOException $e) {
       error_log("UsuarioTiposModel::save() -> " . $e->getMessage());
@@ -49,12 +53,12 @@ class TipoUsuarioModel extends Model
     }
   }
 
-  public function update($tipo, $id)
+  public function update()
   {
     try {
-      $query = $this->prepare("UPDATE usuario_tipos SET tipo=:tipo WHERE id=:id;");
-      $query->bindParam(':tipo', $tipo, PDO::PARAM_STR);
-      $query->bindParam(':id', $id, PDO::PARAM_STR);
+      $query = $this->prepare("UPDATE tipousuario SET nombre = :nombre WHERE idTipo = :idTipo;");
+      $query->bindParam(':nombre', $this->nombre, PDO::PARAM_STR);
+      $query->bindParam(':idTipo', $this->idTipo, PDO::PARAM_STR);
       return $query->execute();
     } catch (PDOException $e) {
       error_log("UsuarioTiposModel::update() -> " . $e->getMessage());
@@ -62,13 +66,15 @@ class TipoUsuarioModel extends Model
     }
   }
 
-  public function delete($id)
+  public function updateStatus()
   {
     try {
-      $query = $this->prepare("DELETE FROM usuario_tipos WHERE id = ?;");
-      return $query->execute([$id]);
+      $query = $this->prepare("UPDATE tipousuario SET estado = :estado WHERE idTipo=:idTipo;");
+      $query->bindParam(':idTipo', $this->idTipo, PDO::PARAM_STR);
+      $query->bindParam(':estado', $this->estado, PDO::PARAM_STR);
+      return $query->execute();
     } catch (PDOException $e) {
-      error_log("UsuarioTiposModel::delete() -> " . $e->getMessage());
+      error_log("MarcaModel::update() -> " . $e->getMessage());
       return false;
     }
   }

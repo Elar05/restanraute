@@ -27,15 +27,24 @@ class TipoUsuario extends Session
   public function list()
   {
     $data = [];
-    $vistas = $this->model->getAll();
-    if (count($vistas) > 0) {
-      foreach ($vistas as $vista) {
-        $botones = "<button class='btn btn-warning edit' id='{$vista["id"]}'><i class='fas fa-pen'></i></button>";
-        $botones .= "<button class='btn btn-danger delete' id='{$vista["id"]}'><i class='fas fa-times'></i></button>";
+    $tipousuarios = $this->model->getAll();
+    if (count($tipousuarios) > 0) {
+      foreach ($tipousuarios as $tipousuario) {
+        $botones = "<button class='btn btn-warning edit' idTipo='{$tipousuario["idTipo"]}'><i class='fas fa-pen'></i></button>";
+
+        $class = ($tipousuario["estado"] === "1") ? "success" : "danger";
+        $text = ($tipousuario["estado"] === "1") ? "Activo" : "Inactivo";
+
+        $estado = "<span class='badge badge-$class text-uppercase font-weight-bold cursor-pointer'>$text</span>";
+        $estado .= "<button class='ml-1 btn btn-info estado' data-idTipo='{$tipousuario["idTipo"]}' data-estado='{$tipousuario["estado"]}'><i class='fas fa-sync'></i></button>";
+
+        $permisos = "<button class='btn btn-success permisos' data-idTipo='$tipousuario[idTipo]'><i class='fas fa-id-card'></i></button>";
 
         $data[] = [
-          $vista["id"],
-          $vista["nombre"],
+          $tipousuario["idTipo"],
+          $tipousuario["nombre"],
+          $permisos,
+          $estado,
           $botones,
         ];
       }
@@ -44,68 +53,63 @@ class TipoUsuario extends Session
     $this->response(["data" => $data]);
   }
 
-  public function get()
+  public function create()
   {
-    if (!$this->existsPOST(['id'])) {
+    if (!$this->existsPOST(['nombre'])) {
       $this->response(["error" => "Faltan parametros"]);
     }
 
-    if ($vista = $this->model->get($this->getPost('id'))) {
-      $this->response(["success" => "vista encontrado", "vista" => $vista]);
-    } else {
-      $this->response(["error" => "Error al buscar vista"]);
+    $this->model->nombre = $this->getPost('nombre');
+
+    if ($this->model->save()) {
+      $this->response(["success" => "tipousuario registrado"]);
     }
+
+    $this->response(["error" => "Error al registrar tipousuario"]);
   }
 
-  public function create()
+  public function get()
   {
-    // Validar que no este vacio
-    if (!$this->existsPOST(['nombre'])) {
-      $this->response(['error' => 'Faltan parametros']);
+    if (!$this->existsPOST(['idTipo'])) {
+      $this->response(["error" => "Faltan parametros"]);
     }
 
-    $nombre = $this->getPost('nombre');
-
-    // Validar existencia
-    if ($this->model->get($nombre, 'nombre')) {
-      $this->response(['error' => 'Ya existe la vista']);
+    if ($tipousuario = $this->model->get($this->getPost('idTipo'))) {
+      $this->response(["success" => "tipousuario encontrado", "tipousuario" => $tipousuario]);
+    } else {
+      $this->response(["error" => "Error al buscar tipousuario"]);
     }
-
-    // Guardar
-    $this->model->nombre = $nombre;
-    if ($this->model->save()) {
-      $this->response(['success' => 'Se guardo la vista']);
-    }
-    $this->response(['error' => 'Error al guardar la vista']);
   }
 
   public function edit()
   {
-    if (!$this->existsPOST(['id', 'nombre'])) {
-      $this->response(['error' => 'Faltan parametros']);
+    if (!$this->existsPOST(['idTipo', 'nombre'])) {
+      $this->response(["error" => "Faltan parametros"]);
     }
 
-    $this->model->id = $this->getPost('id');
+    $this->model->idTipo = $this->getPost('idTipo');
     $this->model->nombre = $this->getPost('nombre');
 
     if ($this->model->update()) {
-      $this->response(['success' => 'Vista actualizada']);
+      $this->response(["success" => "tipousuario actualizado"]);
     }
 
-    $this->response(['error' => 'Faltan parametros']);
+    $this->response(["error" => "Error al actualizar tipousuario"]);
   }
 
-  public function delete()
+  public function updateStatus()
   {
-    if (!$this->existsPOST(['id'])) {
+    if (!$this->existsPOST(['idTipo', 'estado'])) {
       $this->response(['error' => 'Faltan parametros']);
     }
 
-    $this->model->id = $this->getPost('id');
-    if ($this->model->delete()) {
-      $this->response(['success' => 'Vista actualizada']);
+    $this->model->idTipo = $this->getPost('idTipo');
+    $this->model->estado = ($this->getPost('estado') == 0) ? 1 : 0;
+
+    if ($this->model->updateStatus()) {
+      $this->response(["success" => "Estado actualizado"]);
     }
 
-    $this->response(['error' => 'Faltan parametros']);
+    $this->response(["error" => "Error al actualizar estado"]);
   }
 }
