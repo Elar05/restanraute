@@ -26,6 +26,7 @@
                       <th>ID</th>
                       <th>Tipo</th>
                       <th>Permisos</th>
+                      <th>Estado</th>
                       <th>Acciones</th>
                     </tr>
                   </thead>
@@ -39,7 +40,7 @@
     </div>
   </section>
 
-  <div class="modal fade" id="modal_tipousuario" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal fade" id="modal_tipousuario" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
@@ -68,6 +69,36 @@
       </div>
     </div>
   </div>
+
+  <div class="modal fade" id="modal_vistas" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Asignar vistas al tipo de usuario</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="row">
+            <div class="col-12">
+              <div class="form-group">
+                <div class="selectgroup selectgroup-pills">
+                  <input type="hidden" id="tipo">
+                  <?php foreach ($this->d['vistas'] as $vista) : ?>
+                    <label class="selectgroup-item">
+                      <input type="checkbox" name="vista" id="vista<?= $vista['id'] ?>" value="<?= $vista['id'] ?>" class="selectgroup-input vista">
+                      <span class="selectgroup-button"><?= $vista['nombre'] ?></span>
+                    </label>
+                  <?php endforeach; ?>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 
 <?php require_once 'views/layout/footer.php'; ?>
@@ -77,6 +108,6 @@
 <script src="<?= URL ?>/public/bundles/datatables/DataTables-1.10.16/js/dataTables.bootstrap4.min.js"></script>
 
 <!-- Page Specific JS File -->
-<script src="<?= URL ?>/public/js/tipotipousuario.js"></script>
+<script src="<?= URL ?>/public/js/tipousuario.js"></script>
 
 <?php require_once 'views/layout/foot.php'; ?>
