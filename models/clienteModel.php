@@ -9,6 +9,7 @@ use Libs\Model;
 class ClienteModel extends Model
 {
     public $idCliente;
+    public $documento;
     public $nombres;
     public $email;
     public $telefono;
@@ -50,9 +51,10 @@ class ClienteModel extends Model
     public function save()
     {
         try {
-            $query = $this->prepare("INSERT INTO cliente(nombres, email, telefono,direccion) 
-            VALUES (:nombres, :email, :telefono, :direccion);");
+            $query = $this->prepare("INSERT INTO cliente(documento,nombres, email, telefono,direccion) 
+            VALUES (:documento,:nombres, :email, :telefono, :direccion);");
 
+            $query->bindParam(':documento', $this->documento, PDO::PARAM_STR);
             $query->bindParam(':nombres', $this->nombres, PDO::PARAM_STR);
             $query->bindParam(':email', $this->email, PDO::PARAM_STR);
             $query->bindParam(':telefono', $this->telefono, PDO::PARAM_STR);
@@ -68,10 +70,11 @@ class ClienteModel extends Model
     public function update()
     {
         try {
-            $query = $this->prepare("UPDATE cliente SET nombres = :nombres, email = :email, telefono = :telefono, direccion = :direccion WHERE idCliente = :idCliente;");
+            $query = $this->prepare("UPDATE cliente SET documento = :documento, nombres = :nombres, email = :email, telefono = :telefono, direccion = :direccion WHERE idCliente = :idCliente;");
 
             return $query->execute([
                 'idCliente' => $this->idCliente,
+                'documento' => $this->documento,
                 'nombres' => $this->nombres,
                 'email' => $this->email,
                 'telefono' => $this->telefono,
