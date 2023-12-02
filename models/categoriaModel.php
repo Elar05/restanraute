@@ -20,11 +20,11 @@ class CategoriaModel extends Model
     public function get($id, $colum = "idCategoria")
   {
     try {
-      $query = $this->prepare("SELECT * FROM usuario WHERE $colum = ?;");
+      $query = $this->prepare("SELECT * FROM categoria WHERE $colum = ?;");
       $query->execute([$id]);
       return $query->fetch(PDO::FETCH_ASSOC);
     } catch (PDOException $e) {
-      error_log("UserModel::get() -> " . $e->getMessage());
+      error_log("categoriaModel::get() -> " . $e->getMessage());
       return false;
     }
   }
@@ -61,18 +61,27 @@ class CategoriaModel extends Model
   public function update()
   {
     try {
-      $query = $this->prepare("UPDATE categoria SET nombre = :nombre, estado = :estado WHERE idCategoria = :idCategoria;");
+      $query = $this->prepare("UPDATE categoria SET nombre = :nombre WHERE idCategoria = :idCategoria;");
 
       return $query->execute([
         'idCategoria' => $this->idCategoria,
         'nombre' => $this->nombre,
-        'estado' => $this->nombre,
-
-
 
       ]);
     } catch (PDOException $e) {
       error_log("CategoriaModel::update() -> " . $e->getMessage());
+      return false;
+    }
+  }
+  public function updateStatus()
+  {
+    try {
+      $query = $this->prepare("UPDATE categoria SET estado = :estado WHERE idcategoria=:idcategoria;");
+      $query->bindParam(':estado', $this->estado, PDO::PARAM_STR);
+      $query->bindParam(':idcategoria', $this->idCategoria, PDO::PARAM_STR);
+      return $query->execute();
+    } catch (PDOException $e) {
+      error_log("MarcaModel::update() -> " . $e->getMessage());
       return false;
     }
   }

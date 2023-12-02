@@ -5,7 +5,7 @@ namespace Controllers;
 use Libs\Session;
 use Models\UsuarioModel;
 
-class User extends Session
+class Usuario extends Session
 {
   public $model;
 
@@ -17,41 +17,51 @@ class User extends Session
 
   public function render()
   {
-    $this->view->render('user/index');
+    $this->view->render('usuario/index');
   }
 
-  public function index()
+  public function list()
   {
     $data = [];
     $users = $this->model->getAll();
     if (count($users) > 0) {
       foreach ($users as $user) {
-        $botones = "<button class='btn btn-warning edit' id='{$user["id"]}'>Editar</button>";
-        $botones .= "<button class='ml-1 btn btn-danger delete' id='{$user["id"]}'>Eliminar</button>";
+        $botones = "<button class='btn btn-warning edit' idUsuario='{$user["idUsuario"]}'><i class='fas fa-pen'></i></button>";
+
+        $class = ($user["estado"] === "1") ? "success" : "danger";
+        $text = ($user["estado"] === "1") ? "Activo" : "Inactivo";
+
+        $estado = "<span class='badge badge-$class text-uppercase font-weight-bold cursor-pointer'>$text</span>";
+        $estado .= "<button class='ml-1 btn btn-info estado' data-idusuario='{$user["idUsuario"]}' data-estado='{$user["estado"]}'><i class='fas fa-sync'></i></button>";
 
         $data[] = [
-          $user["id"],
-          $user["names"],
+          $user["idUsuario"],
+          $user["nombres"],
+          $user["telefono"],
           $user["email"],
-          $user["phone"],
+          $user["direccion"],
+          $user["idtipo"],
+          $estado,
           $botones,
         ];
       }
     }
 
-    $this->response($data);
+    $this->response(["data" => $data]);
   }
 
   public function create()
   {
-    if (!$this->existsPOST(['nombres', 'telefono', 'email', 'password'])) {
+    if (!$this->existsPOST(['tipo', 'nombres', 'email', 'password', 'telefono', 'direccion'])) {
       $this->response(["error" => "Faltan parametros"]);
     }
 
-    $this->model->names = $this->getPost('names');
-    $this->model->phone = $this->getPost('phone');
+    $this->model->idtipo = $this->getPost('tipo');
+    $this->model->nombres = $this->getPost('nombres');
     $this->model->email = $this->getPost('email');
     $this->model->password = password_hash($this->getPost('password'), PASSWORD_DEFAULT, ["cost" => 10]);
+    $this->model->telefono = $this->getPost('telefono');
+    $this->model->direccion = $this->getPost('direccion');
 
     if ($this->model->save()) {
       $this->response(["success" => "user registrado"]);
@@ -61,11 +71,11 @@ class User extends Session
 
   public function get()
   {
-    if (!$this->existsPOST(['id'])) {
+    if (!$this->existsPOST(['idUsuario'])) {
       $this->response(["error" => "Faltan parametros"]);
     }
 
-    if ($user = $this->model->get($this->getPost('id'))) {
+    if ($user = $this->model->get($this->getPost('idUsuario'))) {
       unset($user["password"]);
       $this->response(["success" => "user encontrado", "user" => $user]);
     } else {
@@ -75,14 +85,16 @@ class User extends Session
 
   public function edit()
   {
-    if (!$this->existsPOST(['id', 'nombres', 'telefono', 'email'])) {
+    if (!$this->existsPOST(['idUsuario', 'tipo', 'nombres', 'email', 'telefono'])) {
       $this->response(["error" => "Faltan parametros"]);
     }
 
-    $this->model->id = $this->getPost('id');
-    $this->model->names = $this->getPost('names');
-    $this->model->phone = $this->getPost('phone');
+    $this->model->idUsuario = $this->getPost('idUsuario');
+    $this->model->idtipo = $this->getPost('tipo');
+    $this->model->nombres = $this->getPost('nombres');
+    $this->model->telefono = $this->getPost('telefono');
     $this->model->email = $this->getPost('email');
+    $this->model->direccion = $this->getPost('direccion');
 
     if ($this->model->update()) {
       if ($this->existsPOST(['password'])) {
@@ -96,15 +108,19 @@ class User extends Session
     $this->response(["error" => "Error al actualizar user"]);
   }
 
-  public function delete()
+  public function updateStatus()
   {
-    if (!$this->existsPOST(['id'])) {
-      $this->response(["error" => "Faltan parametros"]);
+    if (!$this->existsPOST(['idUsuario', 'estado'])) {
+      $this->response(['error' => 'Faltan parametros']);
     }
 
-    if ($this->model->delete($this->getPost('id'))) {
-      $this->response(["success" => "user eliminado"]);
+    $this->model->idUsuario = $this->getPost('idUsuario');
+    $this->model->estado = ($this->getPost('estado') == 0) ? 1 : 0;
+
+    if ($this->model->updateStatus()) {
+      $this->response(["success" => "Estado actualizado"]);
     }
-    $this->response(["error" => "Error al eliminar user"]);
+
+    $this->response(["error" => "Error al actualizar estado"]);
   }
 }

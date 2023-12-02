@@ -50,7 +50,7 @@
                 </div>
                 <div class="modal-body">
                     <form id="form_categoria" method="post" novalidate>
-                        <input type="hidden" name="id" id="id">
+                        <input type="hidden" name="idcategoria" id="idcategoria">
                         <input type="hidden" name="action" id="action" value="create">
 
 

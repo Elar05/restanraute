@@ -4,6 +4,7 @@ namespace Libs;
 
 use Libs\Controller;
 use Controllers\Errores;
+use Models\PermisoModel;
 
 class Session extends Controller
 {
@@ -35,12 +36,16 @@ class Session extends Controller
 
   public function sites()
   {
+    require_once 'models/permisoModel.php';
+    $permisoModel = new PermisoModel();
+    return $permisoModel->getPermisos($this->userType);
+
     return [
       "0" => [
         'login',
       ],
       "1" => [
-        'main', 'logout', 'usuario', 'categoria',
+        'main', 'logout', 'usuario', 'cliente', 'categoria', 'item', 'tipousuario', 'delivery', 'venta', 'pedido', 'reserva', 'permisos', 'vistas'
       ],
       "2" => [
         'main', 'logout',
@@ -84,7 +89,7 @@ class Session extends Controller
 
   public function isAuthorized($view, $tipo)
   {
-    // return in_array($view, $this->sites); // Desde bd
+    return in_array($view, $this->sites); // Desde bd
     return in_array($view, $this->sites[$tipo]); // En codigo
   }
 
