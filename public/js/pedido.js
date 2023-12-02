@@ -1,3 +1,7 @@
+$(document).ready(function () {
+  $("body").addClass("sidebar-mini");
+});
+
 $("#tipo").change(function () {
   if ($(this).val() == "local") {
     $("#group_delivery").addClass("d-none");

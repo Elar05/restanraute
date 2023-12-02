@@ -15,4 +15,9 @@ class Pedido extends Session
   {
     $this->view->render('pedido/index');
   }
+
+  public function nuevo()
+  {
+    $this->view->render('pedido/nuevo');
+  }
 }
