@@ -56,37 +56,7 @@
                         <input type="hidden" name="idcliente" id="idcliente">
                         <input type="hidden" name="action" id="action" value="create">
 
-                        <div class="form-group">
-                            <label for="nombres">Nombres</label>
-                            <input type="text" id="nombres" name="nombres" class="form-control" pattern="[A-Za-záéíóúÁÉÍÓÚñÑ ]+" required>
-                            <div class="invalid-feedback">
-                                Oh no! Nombres is invalid.
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="email">Email</label>
-                            <input type="email" id="email" name="email" class="form-control" required>
-                            <div class="invalid-feedback">
-                                Oh no! Email is invalid.
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="telefono">Teléfono</label>
-                            <input type="text" id="telefono" name="telefono" class="form-control" pattern="[0-9]+" required>
-                            <div class="invalid-feedback">
-                                Oh no! Teléfono is invalid.
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="direccion">Dirección</label>
-                            <input type="text" id="direccion" name="direccion" class="form-control" pattern="[A-Za-z0-9 ]+" required>
-                            <div class="invalid-feedback">
-                                Oh no! Dirección is invalid.
-                            </div>
-                        </div>
+                        <?php require_once 'views/cliente/inputs.php'; ?>
 
                         <div class="mt-2 text-right">
                             <button type="submit" class="btn btn-primary">Registrar cliente</button>
