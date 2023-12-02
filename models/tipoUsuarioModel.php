@@ -17,7 +17,7 @@ class TipoUsuarioModel extends Model
     parent::__construct();
   }
 
-  public function get($id, $column = 'id')
+  public function get($id, $column = 'idTipo')
   {
     try {
       $query = $this->prepare("SELECT * FROM tipousuario WHERE $column = ?;");
