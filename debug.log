@@ -1,0 +1,89 @@
+[01-Dec-2023 19:27:53 America/Lima] PHP Parse error:  syntax error, unexpected token "<<", expecting "]" in C:\xampp\htdocs\restaurante\libs\session.php on line 48
+[01-Dec-2023 19:27:53 America/Lima] PHP Parse error:  syntax error, unexpected token "<<", expecting "]" in C:\xampp\htdocs\restaurante\libs\session.php on line 48
+[01-Dec-2023 19:27:54 America/Lima] PHP Parse error:  syntax error, unexpected token "<<", expecting "]" in C:\xampp\htdocs\restaurante\libs\session.php on line 48
+[01-Dec-2023 19:27:55 America/Lima] PHP Parse error:  syntax error, unexpected token "<<", expecting "]" in C:\xampp\htdocs\restaurante\libs\session.php on line 48
+[01-Dec-2023 19:28:01 America/Lima] PHP Parse error:  syntax error, unexpected token "<<", expecting "]" in C:\xampp\htdocs\restaurante\libs\session.php on line 48
+[01-Dec-2023 19:28:11 America/Lima] PHP Parse error:  syntax error, unexpected token "<<", expecting "]" in C:\xampp\htdocs\restaurante\libs\session.php on line 48
+[01-Dec-2023 19:28:16 America/Lima] PHP Parse error:  syntax error, unexpected token "<<", expecting "]" in C:\xampp\htdocs\restaurante\libs\session.php on line 48
+[01-Dec-2023 19:28:17 America/Lima] PHP Parse error:  syntax error, unexpected token "<<", expecting "]" in C:\xampp\htdocs\restaurante\libs\session.php on line 48
+[01-Dec-2023 19:28:23 America/Lima] PHP Parse error:  syntax error, unexpected token "<<", expecting "]" in C:\xampp\htdocs\restaurante\libs\session.php on line 48
+[01-Dec-2023 19:28:28 America/Lima] PHP Parse error:  syntax error, unexpected token "<<", expecting "]" in C:\xampp\htdocs\restaurante\libs\session.php on line 48
+[01-Dec-2023 19:28:37 America/Lima] PHP Parse error:  syntax error, unexpected token "<<", expecting "]" in C:\xampp\htdocs\restaurante\libs\session.php on line 48
+[01-Dec-2023 19:28:39 America/Lima] PHP Parse error:  syntax error, unexpected token "<<", expecting "]" in C:\xampp\htdocs\restaurante\libs\session.php on line 48
+[01-Dec-2023 19:30:00 America/Lima] PermisoModel::getPermisos() -> SQLSTATE[42S02]: Base table or view not found: 1146 Table 'bdmicesar.permisos' doesn't exist
+[01-Dec-2023 19:30:00 America/Lima] PHP Fatal error:  Uncaught TypeError: in_array(): Argument #2 ($haystack) must be of type array, bool given in C:\xampp\htdocs\restaurante\libs\session.php:92
+Stack trace:
+#0 C:\xampp\htdocs\restaurante\libs\session.php(92): in_array('main', false)
+#1 C:\xampp\htdocs\restaurante\libs\session.php(62): Libs\Session->isAuthorized('main', 1)
+#2 C:\xampp\htdocs\restaurante\libs\session.php(32): Libs\Session->validateSession()
+#3 C:\xampp\htdocs\restaurante\controllers\main.php(11): Libs\Session->__construct('main')
+#4 C:\xampp\htdocs\restaurante\libs\app.php(25): Controllers\Main->__construct('main')
+#5 C:\xampp\htdocs\restaurante\index.php(26): App->__construct()
+#6 {main}
+  thrown in C:\xampp\htdocs\restaurante\libs\session.php on line 92
+[01-Dec-2023 19:30:03 America/Lima] PermisoModel::getPermisos() -> SQLSTATE[42S02]: Base table or view not found: 1146 Table 'bdmicesar.permisos' doesn't exist
+[01-Dec-2023 19:30:03 America/Lima] PHP Fatal error:  Uncaught TypeError: in_array(): Argument #2 ($haystack) must be of type array, bool given in C:\xampp\htdocs\restaurante\libs\session.php:92
+Stack trace:
+#0 C:\xampp\htdocs\restaurante\libs\session.php(92): in_array('main', false)
+#1 C:\xampp\htdocs\restaurante\libs\session.php(62): Libs\Session->isAuthorized('main', 1)
+#2 C:\xampp\htdocs\restaurante\libs\session.php(32): Libs\Session->validateSession()
+#3 C:\xampp\htdocs\restaurante\controllers\main.php(11): Libs\Session->__construct('main')
+#4 C:\xampp\htdocs\restaurante\libs\app.php(25): Controllers\Main->__construct('main')
+#5 C:\xampp\htdocs\restaurante\index.php(26): App->__construct()
+#6 {main}
+  thrown in C:\xampp\htdocs\restaurante\libs\session.php on line 92
+[01-Dec-2023 19:30:04 America/Lima] PermisoModel::getPermisos() -> SQLSTATE[42S02]: Base table or view not found: 1146 Table 'bdmicesar.permisos' doesn't exist
+[01-Dec-2023 19:30:04 America/Lima] PHP Fatal error:  Uncaught TypeError: in_array(): Argument #2 ($haystack) must be of type array, bool given in C:\xampp\htdocs\restaurante\libs\session.php:92
+Stack trace:
+#0 C:\xampp\htdocs\restaurante\libs\session.php(92): in_array('main', false)
+#1 C:\xampp\htdocs\restaurante\libs\session.php(62): Libs\Session->isAuthorized('main', 1)
+#2 C:\xampp\htdocs\restaurante\libs\session.php(32): Libs\Session->validateSession()
+#3 C:\xampp\htdocs\restaurante\controllers\main.php(11): Libs\Session->__construct('main')
+#4 C:\xampp\htdocs\restaurante\libs\app.php(25): Controllers\Main->__construct('main')
+#5 C:\xampp\htdocs\restaurante\index.php(26): App->__construct()
+#6 {main}
+  thrown in C:\xampp\htdocs\restaurante\libs\session.php on line 92
+[01-Dec-2023 19:30:04 America/Lima] PermisoModel::getPermisos() -> SQLSTATE[42S02]: Base table or view not found: 1146 Table 'bdmicesar.permisos' doesn't exist
+[01-Dec-2023 19:30:04 America/Lima] PHP Fatal error:  Uncaught TypeError: in_array(): Argument #2 ($haystack) must be of type array, bool given in C:\xampp\htdocs\restaurante\libs\session.php:92
+Stack trace:
+#0 C:\xampp\htdocs\restaurante\libs\session.php(92): in_array('main', false)
+#1 C:\xampp\htdocs\restaurante\libs\session.php(62): Libs\Session->isAuthorized('main', 1)
+#2 C:\xampp\htdocs\restaurante\libs\session.php(32): Libs\Session->validateSession()
+#3 C:\xampp\htdocs\restaurante\controllers\main.php(11): Libs\Session->__construct('main')
+#4 C:\xampp\htdocs\restaurante\libs\app.php(25): Controllers\Main->__construct('main')
+#5 C:\xampp\htdocs\restaurante\index.php(26): App->__construct()
+#6 {main}
+  thrown in C:\xampp\htdocs\restaurante\libs\session.php on line 92
+[01-Dec-2023 19:30:05 America/Lima] PermisoModel::getPermisos() -> SQLSTATE[42S02]: Base table or view not found: 1146 Table 'bdmicesar.permisos' doesn't exist
+[01-Dec-2023 19:30:05 America/Lima] PHP Fatal error:  Uncaught TypeError: in_array(): Argument #2 ($haystack) must be of type array, bool given in C:\xampp\htdocs\restaurante\libs\session.php:92
+Stack trace:
+#0 C:\xampp\htdocs\restaurante\libs\session.php(92): in_array('main', false)
+#1 C:\xampp\htdocs\restaurante\libs\session.php(62): Libs\Session->isAuthorized('main', 1)
+#2 C:\xampp\htdocs\restaurante\libs\session.php(32): Libs\Session->validateSession()
+#3 C:\xampp\htdocs\restaurante\controllers\main.php(11): Libs\Session->__construct('main')
+#4 C:\xampp\htdocs\restaurante\libs\app.php(25): Controllers\Main->__construct('main')
+#5 C:\xampp\htdocs\restaurante\index.php(26): App->__construct()
+#6 {main}
+  thrown in C:\xampp\htdocs\restaurante\libs\session.php on line 92
+[01-Dec-2023 19:30:07 America/Lima] PermisoModel::getPermisos() -> SQLSTATE[42S02]: Base table or view not found: 1146 Table 'bdmicesar.permisos' doesn't exist
+[01-Dec-2023 19:30:07 America/Lima] PHP Fatal error:  Uncaught TypeError: in_array(): Argument #2 ($haystack) must be of type array, bool given in C:\xampp\htdocs\restaurante\libs\session.php:92
+Stack trace:
+#0 C:\xampp\htdocs\restaurante\libs\session.php(92): in_array('login', false)
+#1 C:\xampp\htdocs\restaurante\libs\session.php(62): Libs\Session->isAuthorized('login', 1)
+#2 C:\xampp\htdocs\restaurante\libs\session.php(32): Libs\Session->validateSession()
+#3 C:\xampp\htdocs\restaurante\controllers\login.php(15): Libs\Session->__construct('login')
+#4 C:\xampp\htdocs\restaurante\libs\app.php(15): Controllers\Login->__construct('login')
+#5 C:\xampp\htdocs\restaurante\index.php(26): App->__construct()
+#6 {main}
+  thrown in C:\xampp\htdocs\restaurante\libs\session.php on line 92
+[01-Dec-2023 19:30:08 America/Lima] PermisoModel::getPermisos() -> SQLSTATE[42S02]: Base table or view not found: 1146 Table 'bdmicesar.permisos' doesn't exist
+[01-Dec-2023 19:30:08 America/Lima] PHP Fatal error:  Uncaught TypeError: in_array(): Argument #2 ($haystack) must be of type array, bool given in C:\xampp\htdocs\restaurante\libs\session.php:92
+Stack trace:
+#0 C:\xampp\htdocs\restaurante\libs\session.php(92): in_array('login', false)
+#1 C:\xampp\htdocs\restaurante\libs\session.php(62): Libs\Session->isAuthorized('login', 1)
+#2 C:\xampp\htdocs\restaurante\libs\session.php(32): Libs\Session->validateSession()
+#3 C:\xampp\htdocs\restaurante\controllers\login.php(15): Libs\Session->__construct('login')
+#4 C:\xampp\htdocs\restaurante\libs\app.php(15): Controllers\Login->__construct('login')
+#5 C:\xampp\htdocs\restaurante\index.php(26): App->__construct()
+#6 {main}
+  thrown in C:\xampp\htdocs\restaurante\libs\session.php on line 92
