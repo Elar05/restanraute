@@ -27,7 +27,7 @@ class ClienteModel extends Model
             $query->execute([$value]);
             return $query->fetch(PDO::FETCH_ASSOC);
         } catch (PDOException $e) {
-            error_log("UserModel::get() -> " . $e->getMessage());
+            error_log("ClienteModel::get() -> " . $e->getMessage());
             return false;
         }
     }
@@ -42,7 +42,7 @@ class ClienteModel extends Model
             $query->execute();
             return $query->fetchAll(PDO::FETCH_ASSOC);
         } catch (PDOException $e) {
-            error_log("UserModel::getAll() -> " . $e->getMessage());
+            error_log("ClienteModel::getAll() -> " . $e->getMessage());
             return false;
         }
     }
@@ -60,7 +60,7 @@ class ClienteModel extends Model
 
             return $query->execute();
         } catch (PDOException $e) {
-            error_log("UserModel::save() -> " . $e->getMessage());
+            error_log("ClienteModel::save() -> " . $e->getMessage());
             return false;
         }
     }
@@ -78,7 +78,7 @@ class ClienteModel extends Model
                 'direccion' => $this->direccion,
             ]);
         } catch (PDOException $e) {
-            error_log("UserModel::update() -> " . $e->getMessage());
+            error_log("ClienteModel::update() -> " . $e->getMessage());
             return false;
         }
     }
@@ -90,12 +90,21 @@ class ClienteModel extends Model
             $query->execute([$idCliente]);
             return true;
         } catch (PDOException $e) {
-            error_log("UserModel::delete() -> " . $e->getMessage());
+            error_log("ClienteModel::delete() -> " . $e->getMessage());
             return false;
         }
     }
 
     public function updateStatus()
     {
+        try {
+            $query = $this->prepare("UPDATE cliente SET estado = :estado WHERE idcliente=:idcliente;");
+            $query->bindParam(':estado', $this->estado, PDO::PARAM_STR);
+            $query->bindParam(':idcliente', $this->idCliente, PDO::PARAM_STR);
+            return $query->execute();
+        } catch (PDOException $e) {
+            error_log("ClienteModel::update() -> " . $e->getMessage());
+            return false;
+        }
     }
 }
