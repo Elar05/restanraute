@@ -13,19 +13,19 @@
         <div class="col-12">
           <div class="card">
             <div class="card-header">
-              <h4>Mantenimiento de usuarios</h4>
+              <h4>Mantenimiento de tipos de usuario</h4>
 
-              <button type="button" class="btn btn-primary" id="add_usuario" data-toggle="modal" data-target="#modal_usuario">
+              <button type="button" class="btn btn-primary" id="add_tipousuario" data-toggle="modal" data-target="#modal_tipousuario">
                 <i class="fa fa-plus"></i> Agregar</button>
             </div>
             <div class="card-body">
               <div class="table-responsive">
-                <table class="table table-striped w-100" id="table_usuario">
+                <table class="table table-striped w-100" id="table_tipousuario">
                   <thead>
                     <tr>
                       <th>ID</th>
                       <th>Tipo</th>
-                      <th>Estado</th>
+                      <th>Permisos</th>
                       <th>Acciones</th>
                     </tr>
                   </thead>
@@ -39,29 +39,29 @@
     </div>
   </section>
 
-  <div class="modal fade" id="modal_usuario" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal fade" id="modal_tipousuario" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title">Formulario usuarios</h5>
+          <h5 class="modal-title">Formulario tipo de usuario</h5>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
         <div class="modal-body">
-          <form id="form_usuario" method="post" novalidate>
-            <input type="hidden" name="idUsuario" id="idUsuario">
+          <form id="form_tipousuario" method="post" novalidate>
+            <input type="hidden" name="idTipo" id="idTipo">
             <input type="hidden" name="action" id="action" value="create">
 
             <div class="form-group">
-              <label for="nombre">Nombre de tipo de usuario</label>
+              <label for="nombre">Tipo de usuario</label>
               <input type="text" id="nombre" name="nombre" class="form-control" pattern="[A-Za-záéíóúÁÉÍÓÚñÑ ]+" required>
               <div class="invalid-feedback">
                 Oh no! Nombre is invalid.
               </div>
             </div>
             <div class="mt-2 text-right">
-              <button type="submit" class="btn btn-primary">Registrar usuario</button>
+              <button type="submit" class="btn btn-primary">Registrar tipousuario</button>
             </div>
           </form>
         </div>
@@ -77,6 +77,6 @@
 <script src="<?= URL ?>/public/bundles/datatables/DataTables-1.10.16/js/dataTables.bootstrap4.min.js"></script>
 
 <!-- Page Specific JS File -->
-<script src="<?= URL ?>/public/js/tipousuario.js"></script>
+<script src="<?= URL ?>/public/js/tipotipousuario.js"></script>
 
 <?php require_once 'views/layout/foot.php'; ?>
