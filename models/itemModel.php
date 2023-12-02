@@ -44,7 +44,7 @@ class ItemModel extends Model
       $sql = "";
       if ($colum !== null && $value !== null) $sql = " WHERE $colum = '$value'";
 
-      $query = $this->query("SELECT * FROM item $sql;");
+      $query = $this->query("SELECT i.*, c.nombre AS categoria FROM item i JOIN categoria c ON i.idcategoria = c.idCategoria $sql;");
       $query->execute();
       return $query->fetchAll(PDO::FETCH_ASSOC);
     } catch (PDOException $e) {

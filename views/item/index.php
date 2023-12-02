@@ -38,7 +38,6 @@
                                             <th>Stock</th>
                                             <th>Stock Min</th>
                                             <th>Descripcion</th>
-                                            <th>Fecha de sRegistro</th>
                                             <th>Estado</th>
                                             <th>Acciones</th>
                                         </tr>
@@ -81,9 +80,11 @@
                             <label for="idcategoria">Categoria</label>
                             <br>
                             <select class="form-control" id="idcategoria" name="idcategoria">
-                                <option value="1">Postre</option>
-                                <option value="2">Bebida</option>
-                                <option value="3">Segundo</option>
+                                <?php
+                                foreach ($this->d['categorias'] as $tipo) {
+                                    echo "<option value='$tipo[idCategoria]'>$tipo[nombre]</option>";
+                                }
+                                ?>
                             </select>
                         </div>
 

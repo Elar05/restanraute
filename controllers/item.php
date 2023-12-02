@@ -3,6 +3,7 @@
 namespace Controllers;
 
 use Libs\Session;
+use Models\CategoriaModel;
 use Models\ItemModel;
 
 class Item extends Session
@@ -17,8 +18,10 @@ class Item extends Session
 
   public function render()
   {
-    $this->view->render('item/index');
-
+    $categorias = new CategoriaModel();
+    $this->view->render('item/index', [
+      "categorias"=>$categorias->getAll()
+    ]);
   }
 
   public function list()
@@ -38,14 +41,13 @@ class Item extends Session
 
         $data[] = [
           $item["idItem"],
-          $item["idcategoria"],
+          $item["categoria"],
           $item["tipo"],
           $item["precio_c"],
           $item["precio_v"],
           $item["stock"],
           $item["stock_min"],
           $item["descripcion"],
-          $item["f_registro"],
 
           $estado,
           $botones,
