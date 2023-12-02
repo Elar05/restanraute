@@ -3,6 +3,7 @@
 namespace Controllers;
 
 use Libs\Session;
+use Models\PermisoModel;
 
 class Permiso extends Session
 {
@@ -11,17 +12,17 @@ class Permiso extends Session
   public function __construct($url)
   {
     parent::__construct($url);
-    // $this->model = new 
+    $this->model = new PermisoModel();
   }
 
   public function get()
   {
-    if (empty($_POST['id'])) {
+    if (!$this->existsPOST(['idTipo'])) {
       $this->response(["error" => "Faltan parametros"]);
     }
 
     $data = [];
-    $permisos = $this->model->getAll($_POST['id']);
+    $permisos = $this->model->getAll($this->getPost('idTipo'));
 
     if (count($permisos) > 0) {
       foreach ($permisos as $permiso) {
@@ -34,17 +35,15 @@ class Permiso extends Session
 
   public function store()
   {
-    if (empty($_POST['vista']) || empty($_POST['tipo'])) {
+    if (!$this->existsPOST(['idTipo', 'vista'])) {
       $this->response(["error" => "Faltan parametros"]);
     }
 
-    $permiso = $this->model->get($_POST['vista'], $_POST['tipo']);
-
-    if ($permiso) {
-      $this->model->delete($_POST['vista'], $_POST['tipo']);
+    if ($permiso = $this->model->get($_POST['vista'], $_POST['idTipo'])) {
+      $this->model->delete($_POST['vista'], $_POST['idTipo']);
       $this->response(["success" => "Permiso eliminado"]);
     } else {
-      $this->model->save($_POST['vista'], $_POST['tipo']);
+      $this->model->save($_POST['vista'], $_POST['idTipo']);
       $this->response(["success" => "Permiso agregado"]);
     }
   }
