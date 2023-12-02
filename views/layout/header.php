@@ -1,6 +1,6 @@
 </head>
 
-<body class="sidebar-mini">
+<body>
   <div class="loader"></div>
 
   <div id="app">

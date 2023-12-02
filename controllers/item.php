@@ -18,7 +18,7 @@ class Item extends Session
   public function render()
   {
     $this->view->render('item/index');
-    
+
   }
 
   public function list()
@@ -28,6 +28,7 @@ class Item extends Session
     if (count($items) > 0) {
       foreach ($items as $item) {
         $botones = "<button class='btn btn-warning edit' idItem='{$item["idItem"]}'><i class='fas fa-pen'></i></button>";
+        $botones .= "<button class='btn btn-info img' foto='{$item["foto"]}'><i class='fas fa-link'></i></button>";
 
         $class = ($item["estado"] === "1") ? "success" : "danger";
         $text = ($item["estado"] === "1") ? "Activo" : "Inactivo";
@@ -43,8 +44,12 @@ class Item extends Session
           $item["precio_v"],
           $item["stock"],
           $item["stock_min"],
+          $item["descripcion"],
+          $item["f_registro"],
+
           $estado,
           $botones,
+          
         ];
       }
     }
@@ -54,18 +59,37 @@ class Item extends Session
 
   public function create()
   {
-    if (!$this->existsPOST(['idCategoria', 'tipo', 'precio_c', 'precio_v', 'stock', 'stock_min', 'foto', 'descripcion'])) {
+    if (!$this->existsPOST(['idcategoria', 'tipo', 'precio_c', 'precio_v', 'stock', 'stock_min', 'descripcion'])) {
       $this->response(["error" => "Faltan parametros"]);
     }
 
-    $this->model->idCategoria = $this->getPost('idCategoria');
+    $urlFoto = "";
+    if (!empty($_FILES["foto"]['name'])) {
+      $foto = $_FILES["foto"];
+
+      $types = ["jpg", "png", "webp", "jpeg"];
+      $type = pathinfo($foto["name"], PATHINFO_EXTENSION);
+
+      if (!in_array($type, $types))
+        $this->response(["error" => "El formato de la imagen no es valida."]);
+
+      $folder = "public/img/productos/";
+      if (!file_exists($folder))
+        mkdir($folder, 0777, true);
+
+      $urlFoto = $folder . str_replace(" ", "", $foto['name']) . ".$type";
+      move_uploaded_file($foto['tmp_name'], $urlFoto);
+    }
+
+    $this->model->idcategoria = $this->getPost('idcategoria');
     $this->model->tipo = $this->getPost('tipo');
     $this->model->precio_c = $this->getPost('precio_c');
     $this->model->precio_v = $this->getPost('precio_v');
     $this->model->stock = $this->getPost('stock');
     $this->model->stock_min = $this->getPost('stock_min');
-    $this->model->foto = $this->getPost('foto');
     $this->model->estado = $this->getPost('estado');
+    $this->model->estado = $this->getPost('descripcion');
+    $this->model->foto = $urlFoto;
 
     if ($this->model->save()) {
       $this->response(["success" => "Item registrado"]);
@@ -80,7 +104,7 @@ class Item extends Session
     }
 
     if ($item = $this->model->get($this->getPost('idItem'))) {
-      $this->response(["success" => "Item encontrado", "Item" => $item]);
+      $this->response(["success" => "Item encontrado", "item" => $item]);
     } else {
       $this->response(["error" => "Error al buscar el Item"]);
     }
@@ -88,17 +112,36 @@ class Item extends Session
 
   public function edit()
   {
-    if (!$this->existsPOST(['idItem','idCategoria', 'tipo', 'precio_c', 'precio_v', 'stock', 'stock_min', 'descripcion'])) {
+    if (!$this->existsPOST(['idItem', 'idcategoria', 'tipo', 'precio_c', 'precio_v', 'stock', 'stock_min', 'descripcion'])) {
       $this->response(["error" => "Faltan parametros"]);
     }
 
+    $urlFoto = $this->getPost('urlfoto');
+    if (!empty($_FILES["foto"]['name'])) {
+      $foto = $_FILES["foto"];
+
+      $types = ["jpg", "png", "webp", "jpeg"];
+      $type = pathinfo($foto["name"], PATHINFO_EXTENSION);
+
+      if (!in_array($type, $types))
+        $this->response(["error" => "El formato de la imagen no es valida."]);
+
+      $folder = "public/img/productos/";
+      if (!file_exists($folder))
+        mkdir($folder, 0777, true);
+
+      $urlFoto = $folder . str_replace(" ", "", $foto['name']) . ".$type";
+      move_uploaded_file($foto['tmp_name'], $urlFoto);
+    }
+
     $this->model->idItem = $this->getPost('idItem');
-    $this->model->idCategoria = $this->getPost('idCategoria');
     $this->model->tipo = $this->getPost('tipo');
+    $this->model->idcategoria = $this->getPost('idcategoria');
     $this->model->precio_c = $this->getPost('precio_c');
     $this->model->precio_v = $this->getPost('precio_v');
     $this->model->stock = $this->getPost('stock_min');
-    $this->model->stock = $this->getPost('descripcion');
+    $this->model->descripcion = $this->getPost('descripcion');
+    $this->model->foto = $urlFoto;
 
     if ($this->model->update()) {
       $this->response(["success" => "Item actualizado"]);

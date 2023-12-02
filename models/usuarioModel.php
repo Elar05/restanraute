@@ -8,18 +8,21 @@ use Libs\Model;
 
 class UsuarioModel extends Model
 {
-  public $id;
-  public $names;
-  public $phone;
+  public $idUsuario;
+  public $idtipo;
+  public $nombres;
   public $email;
   public $password;
+  public $telefono;
+  public $direccion;
+  public $estado;
 
   public function __construct()
   {
     parent::__construct();
   }
 
-  public function get($id, $colum = "id")
+  public function get($id, $colum = "idUsuario")
   {
     try {
       $query = $this->prepare("SELECT * FROM usuario WHERE $colum = ?;");
@@ -49,12 +52,14 @@ class UsuarioModel extends Model
   public function save()
   {
     try {
-      $query = $this->prepare("INSERT INTO usuario(names, phone, email, password) VALUES (:names, :phone, :email, :password);");
+      $query = $this->prepare("INSERT INTO usuario (idtipo, nombres, email, password, telefono, direccion) VALUES (:idtipo, :nombres, :email, :password, :telefono, :direccion);");
 
-      $query->bindParam(':names', $this->names, PDO::PARAM_STR);
-      $query->bindParam(':phone', $this->phone, PDO::PARAM_STR);
+      $query->bindParam(':idtipo', $this->idtipo, PDO::PARAM_STR);
+      $query->bindParam(':nombres', $this->nombres, PDO::PARAM_STR);
       $query->bindParam(':email', $this->email, PDO::PARAM_STR);
       $query->bindParam(':password', $this->password, PDO::PARAM_STR);
+      $query->bindParam(':telefono', $this->telefono, PDO::PARAM_STR);
+      $query->bindParam(':direccion', $this->direccion, PDO::PARAM_STR);
 
       return $query->execute();
     } catch (PDOException $e) {
@@ -66,14 +71,15 @@ class UsuarioModel extends Model
   public function update()
   {
     try {
-      $query = $this->prepare("UPDATE usuario SET names = :names, phone = :phone, email = :email, password = :password WHERE id = :id;");
+      $query = $this->prepare("UPDATE usuario SET nombres = :nombres, telefono = :telefono, email = :email, password = :password, direccion = :direccion WHERE idUsuario = :idUsuario;");
 
       return $query->execute([
-        'id' => $this->id,
-        'names' => $this->names,
-        'phone' => $this->phone,
+        'idUsuario' => $this->idUsuario,
+        'nombres' => $this->nombres,
         'email' => $this->email,
         'password' => $this->password,
+        'telefono' => $this->telefono,
+        'direccion' => $this->direccion,
       ]);
     } catch (PDOException $e) {
       error_log("UserModel::update() -> " . $e->getMessage());
@@ -84,10 +90,10 @@ class UsuarioModel extends Model
   public function updatePassword()
   {
     try {
-      $query = $this->prepare("UPDATE usuario SET password = :password WHERE id = :id;");
+      $query = $this->prepare("UPDATE usuario SET password = :password WHERE idUsuario = :idUsuario;");
 
       return $query->execute([
-        'id' => $this->id,
+        'idUsuario' => $this->idUsuario,
         'password' => $this->password,
       ]);
     } catch (PDOException $e) {
@@ -96,23 +102,16 @@ class UsuarioModel extends Model
     }
   }
 
-  public function delete($id)
+  public function updateStatus()
   {
     try {
-      $query = $this->prepare("DELETE FROM usuario WHERE id = ?;");
-      $query->execute([$id]);
-      return true;
+      $query = $this->prepare("UPDATE usuario SET estado = :estado WHERE idUsuario=:idUsuario;");
+      $query->bindParam(':estado', $this->estado, PDO::PARAM_STR);
+      $query->bindParam(':idUsuario', $this->idUsuario, PDO::PARAM_STR);
+      return $query->execute();
     } catch (PDOException $e) {
-      error_log("UserModel::delete() -> " . $e->getMessage());
+      error_log("MarcaModel::update() -> " . $e->getMessage());
       return false;
     }
-  }
-
-  public function from($array)
-  {
-    $this->id = $array['id'];
-    $this->names = $array['names'];
-    $this->phone = $array['phone'];
-    $this->email = $array['email'];
   }
 }
