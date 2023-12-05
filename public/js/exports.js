@@ -1,3 +1,5 @@
+export const URL_BASE = "http://localhost/restaurante";
+
 export function getDataSelect(select, url = "", data = "") {
   $(`#${select}`).empty();
   $(`#${select}`).append(

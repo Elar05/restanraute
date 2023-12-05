@@ -20,39 +20,51 @@ class Item extends Session
   {
     $categorias = new CategoriaModel();
     $this->view->render('item/index', [
-      "categorias"=>$categorias->getAll()
+      "categorias" => $categorias->getAll()
     ]);
   }
 
   public function list()
   {
+    $filtro = $this->getPost('filtro') ?? '';
+
     $data = [];
     $items = $this->model->getAll();
     if (count($items) > 0) {
       foreach ($items as $item) {
-        $botones = "<button class='btn btn-warning edit' idItem='{$item["idItem"]}'><i class='fas fa-pen'></i></button>";
-        $botones .= "<button class='btn btn-info img' foto='{$item["foto"]}'><i class='fas fa-link'></i></button>";
+        if ($filtro === "") {
+          $botones = "<button class='btn btn-warning edit' idItem='{$item["idItem"]}'><i class='fas fa-pen'></i></button>";
+          $botones .= "<button class='btn btn-info img' foto='{$item["foto"]}'><i class='fas fa-link'></i></button>";
 
-        $class = ($item["estado"] === "1") ? "success" : "danger";
-        $text = ($item["estado"] === "1") ? "Activo" : "Inactivo";
+          $class = ($item["estado"] === "1") ? "success" : "danger";
+          $text = ($item["estado"] === "1") ? "Activo" : "Inactivo";
 
-        $estado = "<span class='badge badge-$class text-uppercase font-weight-bold cursor-pointer'>$text</span>";
-        $estado .= "<button class='ml-1 btn btn-info estado' data-idItem='{$item["idItem"]}' data-estado='{$item["estado"]}'><i class='fas fa-sync'></i></button>";
+          $estado = "<span class='badge badge-$class text-uppercase font-weight-bold cursor-pointer'>$text</span>";
+          $estado .= "<button class='ml-1 btn btn-info estado' data-idItem='{$item["idItem"]}' data-estado='{$item["estado"]}'><i class='fas fa-sync'></i></button>";
 
-        $data[] = [
-          $item["idItem"],
-          $item["categoria"],
-          $item["tipo"],
-          $item["precio_c"],
-          $item["precio_v"],
-          $item["stock"],
-          $item["stock_min"],
-          $item["descripcion"],
+          $data[] = [
+            $item["idItem"],
+            $item["categoria"],
+            $item["tipo"],
+            $item["precio_c"],
+            $item["precio_v"],
+            $item["stock"],
+            $item["stock_min"],
+            $item["descripcion"],
+            $estado,
+            $botones,
+          ];
+        } else {
+          $botones = "<button class='btn btn-success item' idItem='{$item["idItem"]}' stock='{$item["stock"]}' precio='{$item["precio_v"]}' descripcion='{$item["descripcion"]}'><i class='fas fa-plus'></i></button>";
 
-          $estado,
-          $botones,
-          
-        ];
+          $data[] = [
+            $item["descripcion"],
+            $item["categoria"],
+            $item["stock"],
+            $item["precio_v"],
+            $botones,
+          ];
+        }
       }
     }
 
@@ -89,8 +101,7 @@ class Item extends Session
     $this->model->precio_v = $this->getPost('precio_v');
     $this->model->stock = $this->getPost('stock');
     $this->model->stock_min = $this->getPost('stock_min');
-    $this->model->estado = $this->getPost('estado');
-    $this->model->estado = $this->getPost('descripcion');
+    $this->model->descripcion = $this->getPost('descripcion');
     $this->model->foto = $urlFoto;
 
     if ($this->model->save()) {
