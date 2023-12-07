@@ -4,8 +4,12 @@ namespace Controllers;
 
 use Libs\Session;
 use Models\ClienteModel;
+use Models\DeliveryModel;
 use Models\DetalleModel;
+use Models\PagoModel;
 use Models\PedidoModel;
+use Models\ReservaModel;
+use Models\VentaModel;
 
 class Pedido extends Session
 {
@@ -24,7 +28,8 @@ class Pedido extends Session
 
   public function nuevo()
   {
-    $this->view->render('pedido/nuevo');
+    $metodosPago = new PagoModel();
+    $this->view->render('pedido/nuevo', ["metodosPago" => $metodosPago->getAll()]);
   }
 
   public function list()
@@ -39,18 +44,18 @@ class Pedido extends Session
           "0" => [
             "class" => "info", "text" => "En espera",
             "acciones" => "
-              <button class='dropdown-item estado' id='{$item["id"]}' estado='1'><i class='fas fa-spinner text-warning'></i> En proceso</button>
-              <button class='dropdown-item estado' id='{$item["id"]}' estado='3'><i class='fas fa-times text-danger'></i> Cancelar</button>
+              <button class='dropdown-item estado' id='{$item["idPedido"]}' estado='1'><i class='fas fa-spinner text-warning'></i> En proceso</button>
+              <button class='dropdown-item estado' id='{$item["idPedido"]}' estado='3'><i class='fas fa-times text-danger'></i> Cancelar</button>
             "
           ],
           "1" => [
             "class" => "warning", "text" => "En proceso",
             "acciones" => "
-              <button class='dropdown-item terminar' id='{$item["id"]}' iddoc='{$item["iddoc"]}'><i class='fas fa-check text-success'></i> Terminado</button>
-              <button class='dropdown-item estado' id='{$item["id"]}' estado='3'><i class='fas fa-times text-danger'></i> Cancelar</button>
+              <button class='dropdown-item terminar' id='{$item["idPedido"]}'><i class='fas fa-check text-success'></i> Terminado</button>
+              <button class='dropdown-item estado' id='{$item["idPedido"]}' estado='3'><i class='fas fa-times text-danger'></i> Cancelar</button>
             "
           ],
-          "2" => ["class" => "success", "text" => "Terminado", "acciones" => "<button class='dropdown-item informacion' id='{$item["id"]}'><i class='fas fa-info text-info'></i> Informacion</button>"],
+          "2" => ["class" => "success", "text" => "Terminado", "acciones" => "<button class='dropdown-item informacion' id='{$item["idPedido"]}'><i class='fas fa-info text-info'></i> Informacion</button>"],
           "3" => ["class" => "danger", "text" => "Cancelado", "acciones" => ""],
         ];
 
@@ -68,9 +73,9 @@ class Pedido extends Session
 
         $data[] = [
           $item["idPedido"],
-          $item["idcliente"],
-          $item["idusuario"],
-          $item["tipo"],
+          $item["cliente"],
+          $item["usuario"],
+          ucfirst($item["tipo"]),
           $item["total"],
           $estado,
           $botones,
@@ -83,15 +88,20 @@ class Pedido extends Session
 
   public function create()
   {
-    if (!$this->existsPOST(['tipo', 'documento', 'nombres', 'telefono', 'email', 'subtotal', 'igv', 'total', 'items'])) {
+    if (!$this->existsPOST(['tipo', 'documento', 'nombres', 'telefono', 'email', 'subtotal', 'igv', 'total', 'items', 'comprobante', 'pago'])) {
       $this->response(['error' => 'Faltan Parametros']);
+    }
+
+    // Transformar el json a un array y validar que halla elementos
+    $items = json_decode($this->getPost('items'), true);
+    if (empty($items)) {
+      $this->response(['error' => 'No hay items en el pedido']);
     }
 
     // Guardar cliente si no existe
     $clienteModel = new ClienteModel();
     $cliente = $clienteModel->get($_POST['documento'], 'documento');
     if (empty($cliente)) {
-      // $clienteModel->documento = $_POST['documento'];
       $clienteModel->documento = $_POST['documento'];
       $clienteModel->nombres = $_POST['nombres'];
       $clienteModel->email = $_POST['email'];
@@ -113,27 +123,43 @@ class Pedido extends Session
     $pedido->tipo = $tipo;
     $pedido->total = $this->getPost('total');
     $newIdPedido = $pedido->save();
-    if (empty($newIdPedido)) {
-      $this->response(['error' => 'Error al registrar pedido']);
-    }
 
     // Guardar detalle
-    $errors = 0;
-    $items = json_decode($this->getPost('items'), true);
     $detalle = new DetalleModel();
     $detalle->idpedido = $newIdPedido;
     foreach ($items as $item) {
       $detalle->iditem = $item['iditem'];
       $detalle->costo = $item['precio'];
       $detalle->cantidad = $item['cantidad'];
-      if (!$detalle->save()) $errors += 1;
-    }
-
-    if ($errors > 0) {
-      $this->response(['error' => 'Error al registrar el detalle']);
+      $detalle->save();
     }
 
     // Guardar venta
+    $venta = new VentaModel();
+    $venta->idpedido = $newIdPedido;
+    $venta->idpago = $this->getPost('pago');
+    $venta->comprobante = $this->getPost('comprobante');
+    $venta->serie = ($this->getPost('comprobante') === "B") ? "B" : "F";
+    $venta->descripcion = $this->getPost('descripcion');
+    $venta->subtotal = $this->getPost('subtotal');
+    $venta->igv = $this->getPost('igv');
+    $venta->total = $this->getPost('total');
+    $venta->save();
+
+    if ($tipo === "delivery") {
+      $delivery = new DeliveryModel();
+      $delivery->idpedido = $newIdPedido;
+      $delivery->direccion = $this->getPost('direccionDelivery');
+      $delivery->costo = $this->getPost('costoDelivery');
+      $delivery->save();
+    }
+
+    if ($tipo === "reserva") {
+      $reserva = new ReservaModel();
+      $reserva->idpedido = $newIdPedido;
+      $reserva->costo = $this->getPost('costoReserva');
+      $reserva->save();
+    }
 
     $this->response(['success' => 'Se registro el pedido']);
   }

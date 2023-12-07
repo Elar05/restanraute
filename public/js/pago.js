@@ -1,10 +1,10 @@
 // Load table
 function loadTable() {
-    $("#tablaClientes").DataTable({
+    $("#table_pago").DataTable({
       destroy: true,
       ajax: {
         type: "post",
-        url: "cliente/list",
+        url: "pago/list",
         data: {},
       },
     });
@@ -14,15 +14,15 @@ function loadTable() {
     loadTable();
   });
   
-  // Establecer la acción al agregar cliente -> create
-  $("#add_cliente").click(function () {
-    $("#form_cliente")[0].reset();
+  // Establecer la acción al agregar pago -> create
+  $("#add_pago").click(function () {
+    $("#form_pago")[0].reset();
     $("#action").val("create");
-    $("#idcliente").val("");
+    $("#idPago").val("");
   });
   
-  // Form cliente => create / update
-  $("#form_cliente").submit(function (e) {
+  // Form pago => create / update
+  $("#form_pago").submit(function (e) {
     e.preventDefault();
   
     let form = $(this);
@@ -30,7 +30,7 @@ function loadTable() {
       let data = form.serialize();
       let url = $("#action").val();
       $.post(
-        `cliente/${url}`,
+        `pago/${url}`,
         data,
         function (data, textStatus, jqXHR) {
           if ("success" in data) {
@@ -41,7 +41,7 @@ function loadTable() {
               displayMode: 1,
             });
             loadTable();
-            $("#modal_cliente").modal("toggle");
+            $("#modal_pago").modal("toggle");
           } else {
             iziToast.error({
               title: "Error, ",
@@ -58,24 +58,19 @@ function loadTable() {
     form.addClass("was-validated");
   });
   
-  // Llenar el form cliente
+  // Llenar el form pago
   $(document).on("click", "button.edit", function () {
-    $("#form_cliente")[0].reset();
+    $("#form_pago")[0].reset();
     $("#action").val("edit");
-    $("#password").removeAttr("required");
-    $("#modal_cliente").modal("toggle");
-    let idcliente = $(this).attr("idcliente");
+    $("#modal_pago").modal("toggle");
+    let idPago = $(this).attr("idPago");
     $.post(
-      `cliente/get`,
-      { idcliente },
+      `pago/get`,
+      { idPago },
       function (data, textStatus, jqXHR) {
-        if ("cliente" in data) {
-          $("#idcliente").val(data.cliente.idCliente);
-          $("#documento").val(data.cliente.documento);
-          $("#nombres").val(data.cliente.nombres);
-          $("#email").val(data.cliente.email);
-          $("#telefono").val(data.cliente.telefono);
-          $("#direccion").val(data.cliente.direccion);
+        if ("pago" in data) {
+          $("#idPago").val(data.pago.idPago);
+          $("#nombre").val(data.pago.nombre);
         } else {
           iziToast.error({
             title: "Error, ",
@@ -91,11 +86,11 @@ function loadTable() {
   
   // Cambiar estado
   $(document).on("click", "button.estado", function () {
-    let idcliente = $(this).data("idcliente"),
+    let idPago = $(this).data("idPago"),
       estado = $(this).data("estado");
     $.post(
-      `cliente/updateStatus`,
-      { idcliente, estado },
+      `pago/updateStatus`,
+      { idPago, estado },
       function (data, textStatus, jqXHR) {
         if ("success" in data) {
           iziToast.success({

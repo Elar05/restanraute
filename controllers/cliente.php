@@ -36,6 +36,7 @@ class Cliente extends Session
 
         $data[] = [
           $cliente["idCliente"],
+          $cliente["documento"],
           $cliente["nombres"],
           $cliente["email"],
           $cliente["telefono"],
@@ -51,10 +52,11 @@ class Cliente extends Session
 
   public function create()
   {
-    if (!$this->existsPOST(['nombres', 'email', 'telefono', 'direccion'])) {
+    if (!$this->existsPOST(['documento', 'nombres', 'email', 'telefono', 'direccion'])) {
       $this->response(["error" => "Faltan parametros"]);
     }
 
+    $this->model->documento = $this->getPost('documento');
     $this->model->nombres = $this->getPost('nombres');
     $this->model->email = $this->getPost('email');
     $this->model->telefono = $this->getPost('telefono');
@@ -72,7 +74,9 @@ class Cliente extends Session
       $this->response(["error" => "Faltan parametros"]);
     }
 
-    if ($cliente = $this->model->get($this->getPost('idcliente'))) {
+    $column = $this->getPost('column') ?? 'idCliente';
+
+    if ($cliente = $this->model->get($this->getPost('idcliente'), $column)) {
       $this->response(["success" => "Cliente encontrado", "cliente" => $cliente]);
     } else {
       $this->response(["error" => "Error al buscar cliente"]);
@@ -81,11 +85,12 @@ class Cliente extends Session
 
   public function edit()
   {
-    if (!$this->existsPOST(['idcliente', 'nombres', 'email', 'telefono', 'direccion'])) {
+    if (!$this->existsPOST(['idcliente', 'documento', 'nombres', 'email', 'telefono', 'direccion'])) {
       $this->response(["error" => "Faltan parametros"]);
     }
 
     $this->model->idCliente = $this->getPost('idcliente');
+    $this->model->documento = $this->getPost('documento');
     $this->model->nombres = $this->getPost('nombres');
     $this->model->email = $this->getPost('email');
     $this->model->telefono = $this->getPost('telefono');

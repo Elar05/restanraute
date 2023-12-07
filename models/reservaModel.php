@@ -49,11 +49,11 @@ class ReservaModel extends Model
     public function save()
     {
         try {
-            $query = $this->prepare("INSERT INTO reserva(costo, fecha) 
-            VALUES (:costo, :fecha);");
+            $query = $this->prepare("INSERT INTO reserva(idpedido, costo) 
+            VALUES (:idpedido, :costo);");
 
+            $query->bindParam(':idpedido', $this->idpedido, PDO::PARAM_STR);
             $query->bindParam(':costo', $this->costo, PDO::PARAM_STR);
-            $query->bindParam(':fecha', $this->fecha, PDO::PARAM_STR);
 
             return $query->execute();
         } catch (PDOException $e) {
@@ -65,13 +65,11 @@ class ReservaModel extends Model
     public function update()
     {
         try {
-            $query = $this->prepare("UPDATE reserva SET costo = :costo, fecha= :fecha WHERE idReserva = :idReserva;");
+            $query = $this->prepare("UPDATE reserva SET costo = :costo WHERE idReserva = :idReserva;");
 
             return $query->execute([
                 'idReserva' => $this->idReserva,
-                'idpedido' => $this->idpedido,
                 'costo' => $this->costo,
-                'fecha' => $this->fecha,
             ]);
         } catch (PDOException $e) {
             error_log("ReservaModel::update() -> " . $e->getMessage());

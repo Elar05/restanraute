@@ -24,6 +24,7 @@
                                     <thead>
                                         <tr>
                                             <th>ID</th>
+                                            <th>Documento</th>
                                             <th>Nombres</th>
                                             <th>Email</th>
                                             <th>Télefono</th>

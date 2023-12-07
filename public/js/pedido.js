@@ -1,4 +1,4 @@
-import { URL_BASE } from "./exports.js";
+import { URL_BASE, getCliente } from "./exports.js";
 
 // Cargar tabla de pedidos
 function loadTable() {
@@ -178,6 +178,7 @@ $("#form_pedido").submit(function (e) {
             position: "topCenter",
             displayMode: 1,
           });
+          window.location.href = `${URL_BASE}/pedido`;
         } else {
           iziToast.error({
             title: "Error, ",
@@ -191,4 +192,31 @@ $("#form_pedido").submit(function (e) {
     );
   }
   form.addClass("was-validated");
+});
+
+// Buscar cliente
+$("#search_cliente").click(function (e) {
+  e.preventDefault();
+  getCliente(
+    { idcliente: $("#documento").val(), column: "documento" },
+    (data) => {
+      if ("error" in data) {
+        iziToast.error({
+          title: "Error, ",
+          message: data.error,
+          position: "topCenter",
+          displayMode: 1,
+        });
+        $("#nombres").val("");
+        $("#email").val("");
+        $("#telefono").val("");
+        $("#direccion").val("");
+      } else {
+        $("#nombres").val(data.cliente.nombres);
+        $("#email").val(data.cliente.email);
+        $("#telefono").val(data.cliente.telefono);
+        $("#direccion").val(data.cliente.direccion);
+      }
+    }
+  );
 });

@@ -39,7 +39,13 @@ class PedidoModel extends Model
       $sql = "";
       if ($colum !== null && $value !== null) $sql = " WHERE $colum = '$value'";
 
-      $query = $this->query("SELECT * FROM pedido $sql;");
+      $query = $this->query(
+        "SELECT p.*, c.nombres AS cliente, u.nombres AS usuario
+        FROM pedido p
+        INNER JOIN cliente c ON p.idcliente = c.idCliente
+        INNER JOIN usuario u ON p.idusuario = u.idUsuario
+        $sql;"
+      );
       $query->execute();
       return $query->fetchAll(PDO::FETCH_ASSOC);
     } catch (PDOException $e) {

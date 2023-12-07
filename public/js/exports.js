@@ -27,3 +27,18 @@ export function getDataSelect(select, url = "", data = "") {
     });
   }
 }
+
+export function getCliente(data, callback) {
+  $.ajax({
+    type: "post",
+    url: `${URL_BASE}/cliente/get`,
+    data,
+    dataType: "json",
+    success: function (response) {
+      callback(response);
+    },
+    error: function (error) {
+      console.error("Error en la solicitud AJAX: " + error);
+    },
+  });
+}

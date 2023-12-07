@@ -10,7 +10,6 @@ class DeliveryModel extends Model
 {
   public $idDelivery;
   public $idpedido;
-  public $idventa;
   public $ciudad;
   public $direccion;
   public $costo;
@@ -73,8 +72,8 @@ class DeliveryModel extends Model
       return $query->execute([
         'idDelivery' => $this->idDelivery,
         'idpedido' => $this->idpedido,
-        'ciudad' => $this->ciudad,
         'direccion' => $this->direccion,
+        'costo' => $this->costo,
       ]);
     } catch (PDOException $e) {
       error_log("DeliveryModel::update() -> " . $e->getMessage());

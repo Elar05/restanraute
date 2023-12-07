@@ -46,7 +46,7 @@
 
               <div id="group_delivery" class="d-none">
                 <div class="form-group">
-                  <label for="direccionDelivery">Dirección</label>
+                  <label for="direccionDelivery">Dirección de delivery</label>
                   <input type="text" id="direccionDelivery" name="direccionDelivery" class="form-control">
 
                   <div class="invalid-feedback">
@@ -72,6 +72,38 @@
                   <div class="invalid-feedback">
                     Oh no! pedido is invalid.
                   </div>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="comprobante">Comprobante</label>
+                <select name="comprobante" id="comprobante" class="form-control" required>
+                  <option value="B">Boleta</option>
+                  <option value="F">Factura</option>
+                </select>
+
+                <div class="invalid-feedback">
+                  Seleccione un comprobante
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="pago">Método de pago</label>
+                <select name="pago" id="pago" class="form-control" required>
+                  <?php foreach ($this->d['metodosPago'] as $pago) : ?>
+                    <option value="<?= $pago['idPago'] ?>"><?= $pago['nombre'] ?></option>
+                  <?php endforeach; ?>
+                </select>
+
+                <div class="invalid-feedback">
+                  Seleccione un pago
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="descripcion">Descripción</label>
+                <input name="descripcion" id="descripcion" class="form-control" required>
+
+                <div class="invalid-feedback">
+                  Seleccione un descripcion
                 </div>
               </div>
             </div>
@@ -116,15 +148,15 @@
               <div class="d-flex">
                 <div class="form-group">
                   <label for="subtotal">Subtotal</label>
-                  <input name="subtotal" id="subtotal" class="form-control">
+                  <input name="subtotal" id="subtotal" class="form-control" required>
                 </div>
                 <div class="form-group">
                   <label for="igv">IGV</label>
-                  <input name="igv" id="igv" class="form-control">
+                  <input name="igv" id="igv" class="form-control" required>
                 </div>
                 <div class="form-group">
                   <label for="total">Total</label>
-                  <input name="total" id="total" class="form-control">
+                  <input name="total" id="total" class="form-control" required>
                 </div>
               </div>
 
