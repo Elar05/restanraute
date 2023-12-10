@@ -51,7 +51,8 @@ class ClienteModel extends Model
     public function save()
     {
         try {
-            $query = $this->prepare("INSERT INTO cliente(documento,nombres, email, telefono,direccion) 
+            $pdo = $this->connect();
+            $query = $pdo->prepare("INSERT INTO cliente(documento,nombres, email, telefono,direccion) 
             VALUES (:documento,:nombres, :email, :telefono, :direccion);");
 
             $query->bindParam(':documento', $this->documento, PDO::PARAM_STR);
@@ -60,7 +61,8 @@ class ClienteModel extends Model
             $query->bindParam(':telefono', $this->telefono, PDO::PARAM_STR);
             $query->bindParam(':direccion', $this->direccion, PDO::PARAM_STR);
 
-            return $query->execute();
+            $query->execute();
+            return $pdo->lastInsertId();
         } catch (PDOException $e) {
             error_log("ClienteModel::save() -> " . $e->getMessage());
             return false;

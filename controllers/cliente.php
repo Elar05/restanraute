@@ -52,7 +52,7 @@ class Cliente extends Session
 
   public function create()
   {
-    if (!$this->existsPOST(['documento','nombres', 'email', 'telefono', 'direccion'])) {
+    if (!$this->existsPOST(['documento', 'nombres', 'email', 'telefono', 'direccion'])) {
       $this->response(["error" => "Faltan parametros"]);
     }
 
@@ -74,7 +74,9 @@ class Cliente extends Session
       $this->response(["error" => "Faltan parametros"]);
     }
 
-    if ($cliente = $this->model->get($this->getPost('idcliente'))) {
+    $column = $this->getPost('column') ?? 'idCliente';
+
+    if ($cliente = $this->model->get($this->getPost('idcliente'), $column)) {
       $this->response(["success" => "Cliente encontrado", "cliente" => $cliente]);
     } else {
       $this->response(["error" => "Error al buscar cliente"]);
@@ -83,7 +85,7 @@ class Cliente extends Session
 
   public function edit()
   {
-    if (!$this->existsPOST(['idcliente','documento', 'nombres', 'email', 'telefono', 'direccion'])) {
+    if (!$this->existsPOST(['idcliente', 'documento', 'nombres', 'email', 'telefono', 'direccion'])) {
       $this->response(["error" => "Faltan parametros"]);
     }
 

@@ -12,6 +12,8 @@ class VentaModel extends Model
     public $idpedido;
     public $idpago;
     public $comprobante;
+    public $serie;
+    public $correlativo;
     public $descripcion;
     public $subtotal;
     public $igv;
@@ -54,21 +56,35 @@ class VentaModel extends Model
     public function save()
     {
         try {
-            $query = $this->prepare("INSERT INTO venta(idpedido, idpago, comprobante,descripcion, subtotal, igv,total,fecha) 
-            VALUES (:idpedido,:idpago,:comprobante,:descripcion, :subtotal, :igv, :total,:fecha);");
+            $this->correlativo = $this->getLastCorrelativo($this->comprobante) + 1;
 
-            $query->bindParam(':idpedido', $this->idpedido, PDO::PARAM_STR);
-            $query->bindParam(':idpago', $this->idpago, PDO::PARAM_STR);
-            $query->bindParam(':comprobante', $this->comprobante, PDO::PARAM_STR);
-            $query->bindParam(':descripcion', $this->descripcion, PDO::PARAM_STR);
-            $query->bindParam(':subtotal', $this->subtotal, PDO::PARAM_STR);
-            $query->bindParam(':igv', $this->igv, PDO::PARAM_STR);
-            $query->bindParam(':total', $this->total, PDO::PARAM_STR);
-            $query->bindParam(':fecha', $this->fecha, PDO::PARAM_STR);
+            $query = $this->prepare("INSERT INTO venta (idpedido, idpago, comprobante, serie, correlativo, descripcion, subtotal, igv, total) VALUES (:idpedido, :idpago, :comprobante, :serie, :correlativo, :descripcion, :subtotal, :igv, :total);");
+
+            $query->bindValue(':idpedido', $this->idpedido, PDO::PARAM_INT);
+            $query->bindValue(':idpago', $this->idpago, PDO::PARAM_INT);
+            $query->bindValue(':comprobante', $this->comprobante, PDO::PARAM_STR);
+            $query->bindValue(':serie', $this->serie, PDO::PARAM_STR);
+            $query->bindValue(':correlativo', $this->correlativo, PDO::PARAM_STR);
+            $query->bindValue(':descripcion', $this->descripcion, PDO::PARAM_STR);
+            $query->bindValue(':subtotal', $this->subtotal, PDO::PARAM_STR);
+            $query->bindValue(':igv', $this->igv, PDO::PARAM_STR);
+            $query->bindValue(':total', $this->total, PDO::PARAM_STR);
 
             return $query->execute();
         } catch (PDOException $e) {
-            error_log("VentaModel::save() -> " . $e->getMessage());
+            error_log('VentaModel::save() -> ' . $e->getMessage());
+            return false;
+        }
+    }
+
+    public function getLastCorrelativo($comprobante)
+    {
+        try {
+            $query = $this->prepare("SELECT correlativo FROM venta WHERE comprobante = ? ORDER BY idventa DESC LIMIT 1;");
+            $query->execute([$comprobante]);
+            return $query->fetch(PDO::FETCH_ASSOC)['correlativo'] ?? 0;
+        } catch (PDOException $e) {
+            error_log('VentaModel::getLastCorrelativo() -> ' . $e->getMessage());
             return false;
         }
     }
