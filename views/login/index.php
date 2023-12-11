@@ -1,83 +1,43 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-	<meta charset="UTF-8">
-	<meta content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no" name="viewport">
-	<title>Otika - Admin Dashboard Template</title>
-	<!-- General CSS Files -->
-	<link rel="stylesheet" href="<?= URL ?>/public/css/app.min.css">
-	<link rel="stylesheet" href="<?= URL ?>/public/bundles/bootstrap-social/bootstrap-social.css">
-	<!-- Template CSS -->
-	<link rel="stylesheet" href="<?= URL ?>/public/css/style.css">
-	<link rel="stylesheet" href="<?= URL ?>/public/css/components.css">
-	<!-- Custom style CSS -->
-	<link rel="stylesheet" href="<?= URL ?>/public/css/custom.css">
-	<link rel='shortcut icon' type='image/x-icon' href='<?= URL ?>/public/img/favicon.ico' />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MI CESAR</title>
+    <link rel="stylesheet" href="<?= URL ?>/public/login/css/style.css">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
 </head>
-
 <body>
-	<div id="app">
-		<section class="section">
-			<div class="container mt-5 pt-5">
-				<div class="row">
-					<div class="col-12 col-sm-8 offset-sm-2 col-md-6 offset-md-3 col-lg-6 offset-lg-3 col-xl-4 offset-xl-4">
-						<div class="card card-primary">
-							<div class="card-header">
-								<h4>Login</h4>
-							</div>
-							<div class="card-body">
-								<div class="mb-2"><?php $this->showMessages() ?></div>
-
-								<form method="POST" action="<?= URL ?>/login/auth" class="needs-validation" novalidate="">
-									<div class="form-group">
-										<label for="email">Email</label>
-										<input id="email" type="email" class="form-control" name="email" tabindex="1" required autofocus>
-										<div class="invalid-feedback">
-											Please fill in your email
-										</div>
-									</div>
-									<div class="form-group">
-										<label for="password" class="control-label">Password</label>
-										<div class="d-none">
-											<div class="float-right">
-												<a href="auth-forgot-password.html" class="text-small">
-													Forgot Password?
-												</a>
-											</div>
-										</div>
-										<input id="password" type="password" class="form-control" name="password" tabindex="2" required>
-										<div class="invalid-feedback">
-											please fill in your password
-										</div>
-									</div>
-									<div class="form-group">
-										<button type="submit" class="btn btn-primary btn-lg btn-block" tabindex="4">
-											Login
-										</button>
-									</div>
-								</form>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</section>
-	</div>
-	<!-- General JS Scripts -->
-	<script src="<?= URL ?>/public/js/app.min.js"></script>
-
-	<!-- Template JS File -->
-	<script src="<?= URL ?>/public/js/scripts.js"></script>
-
-	<script>
-		$(document).ready(function() {
-			$('body').removeClass('dark');
-			$('body').removeClass('dark-sidebar');
-			$('body').removeClass('theme-black');
-			$('body').addClass('light');
-		});
-	</script>
+    <div class="wrapper">
+        <form action="<?= URL ?>/login/auth" method="post">
+            <div class="logo">
+                <center><img src="<?= URL ?>/public/login/img/logo.png" alt="usuario" style="height: 12rem"></center>
+            </div>
+            <h1>RESTAURANTE <h1>"MI CESAR"</h1></h1>
+            <div class="mb-2"><?php $this->showMessages() ?></div>
+            <div class="input-box">
+                <input type="email" placeholder="Correo" name="email" required>
+                <i class='bx bxs-user'></i>
+            </div>
+            <div class="input-box">
+                <input type="password" class="form-control" id="password" placeholder="Contraseña" name="password" autocomplete="on">
+                <i class='bx bxs-lock-alt'></i>
+            </div>
+            <!-- <div class="remember-forgot">
+                <label><input type="checkbox">Recuérdame</label>
+                <a href="#">Olvidaste tu contraseña??</a>
+            </div> -->
+            <button type="submit" class="btnIngresar">INGRESAR</button>
+            <!-- <div class="consulta-cuenta">
+                <p>No tienes una cuenta?
+                    Consulta con el administrador
+                    <a href="https://wa.me/51982987417?text=Hola%21%20Me%20comunico%20para%20que%20pueda%20crear%20una%20cuenta%20y%20acceder%20al%20sistema%20del%20restaurante%20%22Mi%20C%C3%A9sar%22." target="_blank">
+                        <i class='bx bxs-phone'></i> Enviar mensaje por WhatsApp
+                    </a>
+                </p>
+            </div> -->
+        </form>
+    </div>
 </body>
-
 </html>
