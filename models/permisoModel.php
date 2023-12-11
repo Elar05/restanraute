@@ -40,7 +40,7 @@ class PermisoModel extends Model
   public function getPermisos($id)
   {
     try {
-      $permisos = ['login'];
+      $permisos = ['login','inicio'];
       if ($id === 0) return $permisos;
 
       $query = $this->prepare("SELECT p.*, v.nombre FROM permisos p JOIN vistas v ON p.idvista = v.id WHERE p.idtipousuario = ?;");
