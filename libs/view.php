@@ -29,6 +29,8 @@ class View
       $this->handleSuccess();
     } else if (isset($_GET['error'])) {
       $this->handleError();
+    } else {
+      $this->handleMensaje();
     }
   }
 
@@ -62,23 +64,45 @@ class View
     }
   }
 
+  private function handleMensaje()
+  {
+    if (isset($_GET['mensaje'])) {
+      $this->d['mensaje'] = $_GET['mensaje'];
+    }
+  }
+
   public function showMessages()
   {
     $this->showError();
     $this->showSuccess();
+    $this->showInfo();
   }
 
   public function showError()
   {
     if (array_key_exists('error', $this->d)) {
-      echo '<div class="alert alert-danger">' . $this->d['error'] . '</div>';
+      echo '<div class="alert alert-danger alert-dismissible show fade">' . $this->d['error'] . '</div>';
     }
   }
 
   public function showSuccess()
   {
     if (array_key_exists('success', $this->d)) {
-      echo '<div class="alert alert-success">' . $this->d['success'] . '</div>';
+      echo '<div class="alert alert-success alert-dismissible show fade">' . $this->d['success'] . '</div>';
+    }
+  }
+
+  public function showInfo()
+  {
+    if (array_key_exists('mensaje', $this->d)) {
+      echo "<div class='alert alert-info alert-dismissible show fade'>
+        <div class='alert-body'>
+          <button class='close' data-dismiss='alert'>
+            <span>&times;</span>
+          </button>
+          {$this->d['mensaje']}
+        </div>
+      </div>";
     }
   }
 }

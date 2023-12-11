@@ -8,7 +8,6 @@ use Models\DeliveryModel;
 use Models\DetalleModel;
 use Models\PagoModel;
 use Models\PedidoModel;
-use Models\ReservaModel;
 use Models\VentaModel;
 
 class Pedido extends Session
@@ -38,7 +37,8 @@ class Pedido extends Session
     $items = $this->model->getAll();
     if (count($items) > 0) {
       foreach ($items as $item) {
-        $botones = "<button class='btn btn-warning edit' idPedido='{$item["idPedido"]}'><i class='fas fa-pen'></i></button>";
+        $botones = "<a href='" . URL . "/pedido/edit?idPedido={$item["idPedido"]}' class='btn btn-warning edit' idPedido='{$item["idPedido"]}'><i class='fas fa-pen'></i></a>";
+        $botones .= "<button class='btn btn-info detalle' idPedido='{$item["idPedido"]}'><i class='fas fa-info'></i></button>";
 
         $arrEstado = [
           "0" => [
@@ -139,7 +139,7 @@ class Pedido extends Session
     $venta->idpedido = $newIdPedido;
     $venta->idpago = $this->getPost('pago');
     $venta->comprobante = $this->getPost('comprobante');
-    $venta->serie = ($this->getPost('comprobante') === "B") ? "B" : "F";
+    $venta->serie = ($this->getPost('comprobante') === "B") ? "B001" : "F001";
     $venta->descripcion = $this->getPost('descripcion');
     $venta->subtotal = $this->getPost('subtotal');
     $venta->igv = $this->getPost('igv');
@@ -154,11 +154,77 @@ class Pedido extends Session
       $delivery->save();
     }
 
-    if ($tipo === "reserva") {
-      $reserva = new ReservaModel();
-      $reserva->idpedido = $newIdPedido;
-      $reserva->costo = $this->getPost('costoReserva');
-      $reserva->save();
+    $this->response(['success' => 'Se registro el pedido']);
+  }
+
+  public function edit()
+  {
+    if (!$this->existsGET(['idPedido'])) {
+      $this->redirect('pedido', ["mensaje" => "No existe el pedido"]);
+    }
+
+    $pedido = new PedidoModel();
+
+    $metodosPago = new PagoModel();
+    $this->view->render('pedido/edit', [
+      "metodosPago" => $metodosPago->getAll(),
+      "pedido" => $pedido->get($_GET['idPedido']),
+    ]);
+  }
+
+  public function update()
+  {
+    if (!$this->existsPOST(['tipo', 'subtotal', 'igv', 'total', 'items', 'comprobante', 'pago', 'id'])) {
+      $this->response(['error' => 'Faltan Parametros']);
+    }
+
+    // Transformar el json a un array y validar que halla elementos
+    $items = json_decode($this->getPost('items'), true);
+    if (empty($items)) {
+      $this->response(['error' => 'No hay items en el pedido']);
+    }
+
+    $tipo = $this->getPost('tipo');
+
+    // Registrar pedido
+    $pedidoM = new PedidoModel();
+    $pedido = $pedidoM->get($_POST['id']);
+
+    // Actualizar pedido
+    $pedidoM->idPedido = $pedido['idPedido'];
+    $pedidoM->tipo = $tipo;
+    $pedidoM->total = $this->getPost('total');
+    $pedidoM->update();
+
+    // Guardar detalle
+    $detalle = new DetalleModel();
+    // Eliminar los items anteriores
+    $detalle->delete($pedido['idPedido']);
+
+    $detalle->idpedido = $pedido['idPedido'];
+    foreach ($items as $item) {
+      $detalle->iditem = $item['iditem'];
+      $detalle->costo = $item['precio'];
+      $detalle->cantidad = $item['cantidad'];
+      $detalle->save();
+    }
+
+    // Guardar venta
+    $venta = new VentaModel();
+    $venta->idpedido = $pedido['idPedido'];
+    $venta->idpago = $this->getPost('pago');
+    $venta->descripcion = $this->getPost('descripcion');
+    $venta->subtotal = $this->getPost('subtotal');
+    $venta->igv = $this->getPost('igv');
+    $venta->total = $this->getPost('total');
+    $venta->update();
+
+    if ($tipo === "delivery") {
+      $delivery = new DeliveryModel();
+      $delivery->idpedido = $pedido['idPedido'];
+      $delivery->direccion = $this->getPost('direccionDelivery');
+      $delivery->costo = $this->getPost('costoDelivery');
+      $delivery->update();
     }
 
     $this->response(['success' => 'Se registro el pedido']);

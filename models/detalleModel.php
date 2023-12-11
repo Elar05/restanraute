@@ -46,4 +46,16 @@ class DetalleModel extends Model
       return false;
     }
   }
+
+  public function delete($idpedido)
+  {
+    try {
+      $query = $this->prepare("DELETE FROM detalle WHERE idpedido = ?;");
+      $query->execute([$idpedido]);
+      return $query->fetchAll(PDO::FETCH_ASSOC);
+    } catch (PDOException $e) {
+      error_log("DetalleModel::delete() -> " . $e->getMessage());
+      return false;
+    }
+  }
 }

@@ -7,18 +7,13 @@
     <ul class="sidebar-menu">
       <li class="menu-header">Menu</li>
       <li class="dropdown">
+        <a href="<?= URL ?>/usuario" class="nav-link" data-toggle="tooltip" data-placement="right" data-original-title="Usuarios">
+          <i data-feather="users"></i><span>Usuarios</span>
+        </a>
+      </li>
+      <li class="dropdown">
         <a href="<?= URL ?>/cliente" class="nav-link" data-toggle="tooltip" data-placement="right" data-original-title="Clientes">
           <i data-feather="users"></i><span>Clientes</span>
-        </a>
-      </li>
-      <li class="dropdown">
-        <a href="<?= URL ?>/categoria" class="nav-link" data-toggle="tooltip" data-placement="right" data-original-title="Categorias">
-          <i data-feather="grid"></i><span>Categorias</span>
-        </a>
-      </li>
-      <li class="dropdown">
-        <a href="<?= URL ?>/delivery" class="nav-link" data-toggle="tooltip" data-placement="right" data-original-title="Delivery">
-          <i data-feather="phone-call"></i><span>Delivery</span>
         </a>
       </li>
       <li class="dropdown">
@@ -27,8 +22,13 @@
         </a>
       </li>
       <li class="dropdown">
+        <a href="<?= URL ?>/categoria" class="nav-link" data-toggle="tooltip" data-placement="right" data-original-title="Items">
+          <i data-feather="grid"></i><span>Categorias</span>
+        </a>
+      </li>
+      <li class="dropdown">
         <a href="<?= URL ?>/pago" class="nav-link" data-toggle="tooltip" data-placement="right" data-original-title="Pagos">
-          <i data-feather="credit-card"></i><span>Pagos</span>
+          <i data-feather="credit-card"></i><span>Métedos de Pago</span>
         </a>
       </li>
       <li class="dropdown">
@@ -37,13 +37,8 @@
         </a>
       </li>
       <li class="dropdown">
-        <a href="<?= URL ?>/reserva" class="nav-link" data-toggle="tooltip" data-placement="right" data-original-title="Reservas">
-          <i data-feather="plus-circle"></i><span>Reservas</span>
-        </a>
-      </li>
-      <li class="dropdown">
-        <a href="<?= URL ?>/usuario" class="nav-link" data-toggle="tooltip" data-placement="right" data-original-title="Usuarios">
-          <i data-feather="users"></i><span>Usuarios</span>
+        <a href="<?= URL ?>/delivery" class="nav-link" data-toggle="tooltip" data-placement="right" data-original-title="Delivery">
+          <i data-feather="phone-call"></i><span>Delivery</span>
         </a>
       </li>
       <li class="dropdown">

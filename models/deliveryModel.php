@@ -33,13 +33,20 @@ class DeliveryModel extends Model
     }
   }
 
-  public function getAll($colum = null, $value = null)
+  static public function getAll($colum = null, $value = null)
   {
     try {
       $sql = "";
       if ($colum !== null and $value !== null) $sql = " WHERE $colum = '$value'";
 
-      $query = $this->query("SELECT * FROM delivery $sql;");
+      $pdo = new Model();
+      $query = $pdo->query(
+        "SELECT d.*, c.nombres AS cliente, p.total
+        FROM delivery d
+        INNER JOIN pedido p ON d.idpedido = p.`idPedido`
+        INNER JOIN cliente c ON p.idcliente = c.`idCliente`
+        $sql;"
+      );
       $query->execute();
       return $query->fetchAll(PDO::FETCH_ASSOC);
     } catch (PDOException $e) {
@@ -67,10 +74,9 @@ class DeliveryModel extends Model
   public function update()
   {
     try {
-      $query = $this->prepare("UPDATE delivery SET idpedido = :idpedido, direccion= :direccion WHERE idDelivery = :idDelivery;");
+      $query = $this->prepare("UPDATE delivery SET direccion = :direccion, costo = :costo WHERE idpedido = :idpedido;");
 
       return $query->execute([
-        'idDelivery' => $this->idDelivery,
         'idpedido' => $this->idpedido,
         'direccion' => $this->direccion,
         'costo' => $this->costo,

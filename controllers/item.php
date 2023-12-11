@@ -26,7 +26,7 @@ class Item extends Session
 
   public function list()
   {
-    $filtro = $this->getPost('filtro') ?? '';
+    $filtro = $_POST['filtro'] ?? '';
 
     $data = [];
     $items = $this->model->getAll();

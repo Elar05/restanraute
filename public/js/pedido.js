@@ -24,22 +24,15 @@ function loadTableItems() {
 }
 
 $(document).ready(function () {
-  $("body").addClass("sidebar-mini");
   loadTableItems();
   loadTable();
+  calcTotal();
 });
 
 $("#tipo").change(function () {
-  if ($(this).val() == "local") {
-    $("#group_delivery").addClass("d-none");
-    $("#group_reserva").addClass("d-none");
-  } else if ($(this).val() == "delivery") {
-    $("#group_delivery").removeClass("d-none");
-    $("#group_reserva").addClass("d-none");
-  } else {
-    $("#group_delivery").addClass("d-none");
-    $("#group_reserva").removeClass("d-none");
-  }
+  $(this).val() == "local"
+    ? $("#group_delivery").addClass("d-none")
+    : $("#group_delivery").removeClass("d-none");
 });
 
 // Agregar detalle
@@ -166,9 +159,10 @@ $("#form_pedido").submit(function (e) {
   let form = $(this);
   if (form[0].checkValidity()) {
     let data = form.serialize();
+    let action = $("#action").val();
 
     $.post(
-      `${URL_BASE}/pedido/create`,
+      `${URL_BASE}/pedido/${action}`,
       data,
       function (data, textStatus, jqXHR) {
         if ("success" in data) {

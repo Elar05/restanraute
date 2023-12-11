@@ -38,13 +38,21 @@ class VentaModel extends Model
         }
     }
 
-    public function getAll($colum = null, $value = null)
+    static public function getAll($colum = null, $value = null)
     {
         try {
             $sql = "";
             if ($colum !== null and $value !== null) $sql = " WHERE $colum = '$value'";
 
-            $query = $this->query("SELECT * FROM venta $sql;");
+            $pdo = new Model();
+            $query = $pdo->query(
+                "SELECT v.*, c.nombres AS cliente, pa.nombre AS pago, p.tipo
+                FROM venta v
+                INNER JOIN pedido p ON v.idpedido = p.`idPedido`
+                INNER JOIN cliente c ON p.idcliente = c.`idCliente`
+                INNER JOIN pago pa ON v.idpago = pa.`idPago`
+                $sql;"
+            );
             $query->execute();
             return $query->fetchAll(PDO::FETCH_ASSOC);
         } catch (PDOException $e) {
@@ -92,13 +100,11 @@ class VentaModel extends Model
     public function update()
     {
         try {
-            $query = $this->prepare("UPDATE venta SET idpedido = :idpedido, idpago = :idpago, comprobante = :comprobante, descripcion = :descripcion, subtotal = :subtotal, igv = :igv, total = :total WHERE idventa = :idventa;");
+            $query = $this->prepare("UPDATE venta SET idpago = :idpago, descripcion = :descripcion, subtotal = :subtotal, igv = :igv, total = :total WHERE idpedido = :idpedido;");
 
             return $query->execute([
-                'idventa' => $this->idventa,
                 'idpedido' => $this->idpedido,
                 'idpago' => $this->idpago,
-                'comprobante' => $this->comprobante,
                 'descripcion' => $this->descripcion,
                 'subtotal' => $this->subtotal,
                 'igv' => $this->igv,
@@ -133,5 +139,21 @@ class VentaModel extends Model
             error_log("VentaModel::update() -> " . $e->getMessage());
             return false;
         }
+    }
+
+    public function insertData()
+    {
+        $sql = "INSERT INTO venta (idpedido, idpago, comprobante, subtotal, igv, total, fecha, correlativo) VALUES ";
+        for ($i = 1; $i <= 100; $i++) {
+            $total = rand(50, 200);
+            $randF = rand(1, 12);
+            $randD = rand(1, 30);
+            $fecha = "2023-$randF-$randD";
+            $sql .= "($i, 1, 'B', 1, 1, $total, '$fecha', $i),";
+        }
+        $longitud = strlen($sql);
+        $sql = substr($sql, 0, $longitud - 1) . ";";
+        $query = $this->query($sql);
+        $query->execute();
     }
 }

@@ -21,12 +21,48 @@ class PedidoModel extends Model
     parent::__construct();
   }
 
-  public function get($value, $colum = "idPedido")
+  public function get($idPedido)
   {
     try {
-      $query = $this->prepare("SELECT * FROM pedido WHERE $colum = ?;");
-      $query->execute([$value]);
-      return $query->fetch(PDO::FETCH_ASSOC);
+      $query = $this->prepare(
+        "SELECT
+          p.*,
+          c.*,
+          v.idpago AS pago,
+          v.descripcion,
+          v.comprobante,
+          v.subtotal, v.igv, v.total
+        FROM pedido p
+          INNER JOIN cliente c ON p.idcliente = c.`idCliente`
+          INNER JOIN venta v ON p.`idPedido` = v.idpedido
+        WHERE p.`idPedido` = ? LIMIT 1;"
+      );
+      $query->execute([$idPedido]);
+      $pedido = $query->fetch(PDO::FETCH_ASSOC);
+
+      if ($pedido['tipo'] == 'delivery') {
+        $query = $this->query(
+          "SELECT direccion, costo FROM delivery WHERE idpedido = $pedido[idPedido];"
+        );
+        $query->execute();
+        $pedido['delivery'] = $query->fetch(PDO::FETCH_ASSOC);
+      }
+
+      $query = $this->query(
+        "SELECT
+          d.iditem,
+          d.costo,
+          d.cantidad,
+          d.subtotal,
+          i.stock, i.descripcion
+        FROM detalle d
+          INNER JOIN item i ON d.iditem = i.`idItem`
+        WHERE idpedido = $pedido[idPedido];"
+      );
+      $query->execute();
+      $pedido['detalle'] = $query->fetchAll(PDO::FETCH_ASSOC);
+
+      return $pedido;
     } catch (PDOException $e) {
       error_log("PedidoModel::get() -> " . $e->getMessage());
       return false;
@@ -76,12 +112,10 @@ class PedidoModel extends Model
   public function update()
   {
     try {
-      $query = $this->prepare("UPDATE pedido SET idcliente = :idcliente, idusuario = :idusuario, tipo = :tipo, total = :total WHERE idPedido = :idPedido;");
+      $query = $this->prepare("UPDATE pedido SET tipo = :tipo, total = :total WHERE idPedido = :idPedido;");
 
       return $query->execute([
         'idPedido' => $this->idPedido,
-        'idcliente' => $this->idcliente,
-        'idusuario' => $this->idusuario,
         'tipo' => $this->tipo,
         'total' => $this->total,
       ]);
