@@ -214,3 +214,59 @@ $("#search_cliente").click(function (e) {
     }
   );
 });
+
+// Cambiar estado
+$(document).on("click", "button.terminar", function () {
+  let id = $(this).attr("id"),
+    estado = $(this).attr("estado");
+  $.post(
+    `${URL_BASE}/pedido/updateStatus`,
+    { id, estado },
+    function (data, textStatus, jqXHR) {
+      if ("success" in data) {
+        iziToast.success({
+          title: "Éxito, ",
+          message: data.success,
+          position: "topCenter",
+          displayMode: 1,
+        });
+        loadTable();
+      } else {
+        iziToast.error({
+          title: "Error, ",
+          message: data.error,
+          position: "topCenter",
+          displayMode: 1,
+        });
+      }
+    },
+    "json"
+  );
+});
+$(document).on("click", "button.cancelar", function () {
+  let id = $(this).attr("id"),
+    estado = $(this).attr("estado");
+  $.post(
+    `${URL_BASE}/pedido/cancelar`,
+    { id, estado },
+    function (data, textStatus, jqXHR) {
+      if ("success" in data) {
+        iziToast.success({
+          title: "Éxito, ",
+          message: data.success,
+          position: "topCenter",
+          displayMode: 1,
+        });
+        loadTable();
+      } else {
+        iziToast.error({
+          title: "Error, ",
+          message: data.error,
+          position: "topCenter",
+          displayMode: 1,
+        });
+      }
+    },
+    "json"
+  );
+});

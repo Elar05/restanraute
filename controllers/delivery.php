@@ -20,7 +20,7 @@ class Delivery extends Session
   public function list()
   {
     $deliverys = DeliveryModel::getAll();
-
+    $data = [];
     if (count($deliverys) > 0) {
       foreach ($deliverys as $delivery) {
         $url = URL;

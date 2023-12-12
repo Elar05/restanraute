@@ -51,11 +51,11 @@ class Pedido extends Session
           "1" => [
             "class" => "warning", "text" => "En proceso",
             "acciones" => "
-              <button class='dropdown-item terminar' id='{$item["idPedido"]}'><i class='fas fa-check text-success'></i> Terminado</button>
-              <button class='dropdown-item estado' id='{$item["idPedido"]}' estado='3'><i class='fas fa-times text-danger'></i> Cancelar</button>
+              <button class='dropdown-item terminar' id='{$item["idPedido"]}' estado='2'><i class='fas fa-check text-success'></i> Terminado</button>
+              <button class='dropdown-item cancelar' id='{$item["idPedido"]}' estado='3'><i class='fas fa-times text-danger'></i> Cancelar</button>
             "
           ],
-          "2" => ["class" => "success", "text" => "Terminado", "acciones" => "<button class='dropdown-item informacion' id='{$item["idPedido"]}'><i class='fas fa-info text-info'></i> Informacion</button>"],
+          "2" => ["class" => "success", "text" => "Terminado", "acciones" => ""],
           "3" => ["class" => "danger", "text" => "Cancelado", "acciones" => ""],
         ];
 
@@ -228,5 +228,34 @@ class Pedido extends Session
     }
 
     $this->response(['success' => 'Se registro el pedido']);
+  }
+
+  public function updateStatus()
+  {
+    if (!$this->existsPOST(['id', 'estado'])) {
+      $this->response(['error' => 'Faltan parametros']);
+    }
+
+    $this->model->idPedido = $this->getPost('id');
+    $this->model->estado = $this->getPost('estado');
+
+    if ($this->model->updateStatus()) {
+      $this->response(["success" => "Estado actualizado"]);
+    }
+
+    $this->response(["error" => "Error al actualizar estado"]);
+  }
+
+  public function cancelar()
+  {
+    if (!$this->existsPOST(['id'])) {
+      $this->response(['error' => 'Faltan parametros']);
+    }
+
+    if ($this->model->delete($this->getPost('id'))) {
+      $this->response(["success" => "Pedido cancelado"]);
+    }
+
+    $this->response(["error" => "Error al cancelar estado"]);
   }
 }
