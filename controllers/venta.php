@@ -23,7 +23,8 @@ class Venta extends Session
 
     if (count($ventas) > 0) {
       foreach ($ventas as $venta) {
-        $botones = "<button class='btn btn-info detalle' idventa='{$venta["idventa"]}'><i class='fas fa-info'></i></button>";
+        $url = URL;
+        $botones = "<a href='$url/main/pdf?idPedido=$venta[idpedido]' target='_blank' class='btn btn-danger'><i class='fas fa-file-pdf'></i></a>";
 
         $data[] = [
           $venta["idventa"],

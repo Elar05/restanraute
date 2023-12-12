@@ -5,46 +5,54 @@
 <div class="main-content">
   <section class="section">
     <div class="section-body">
-      <div class="row clearfix">
-        <div class="col-12">
-          <div class="card">
-            <div class="card-header">
-              <h4>Cantidad de ventas en el año: <?= date('Y')?> </h4>
-            </div>
-            <div class="card-body">
-              <div class="recent-report__chart">
-                <div id="chart1"></div>
+      <?php if ($this->userType === 1) : ?>
+        <div class="row clearfix">
+          <div class="col-12">
+            <div class="card">
+              <div class="card-header">
+                <h4>Cantidad de ventas en el año: <?= date('Y') ?> </h4>
+              </div>
+              <div class="card-body">
+                <div class="recent-report__chart">
+                  <div id="chart1"></div>
+                </div>
               </div>
             </div>
           </div>
-        </div>
-    
-        <div class="col-12">
-          <div class="card">
-            <div class="card-header">
-              <h4>Total de ventas en el año: <?= date('Y')?> </h4>
-            </div>
-            <div class="card-body">
-              <div class="recent-report__chart">
-                <div id="chart3"></div>
-              </div>
-            </div>
-          </div>
-        </div>
 
-        <div class="col-12">
-          <div class="card">
-            <div class="card-header">
-              <h4>Pie Chart</h4>
+          <div class="col-12">
+            <div class="card">
+              <div class="card-header">
+                <h4>Total de ventas en el año: <?= date('Y') ?> </h4>
+              </div>
+              <div class="card-body">
+                <div class="recent-report__chart">
+                  <div id="chart3"></div>
+                </div>
+              </div>
             </div>
-            <div class="card-body">
-              <div class="recent-report__chart">
-                <div id="chart7"></div>
+          </div>
+
+          <div class="col-12">
+            <div class="card">
+              <div class="card-header">
+                <h4>Pie Chart</h4>
+              </div>
+              <div class="card-body">
+                <div class="recent-report__chart">
+                  <div id="chart7"></div>
+                </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
+      <?php else : ?>
+        <div class="row">
+          <div class="col-12">
+            <h2>Bienvenido</h2>
+          </div>
+        </div>
+      <?php endif; ?>
     </div>
   </section>
 </div>

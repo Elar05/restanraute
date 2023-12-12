@@ -38,7 +38,7 @@ class Pedido extends Session
     if (count($items) > 0) {
       foreach ($items as $item) {
         $botones = "<a href='" . URL . "/pedido/edit?idPedido={$item["idPedido"]}' class='btn btn-warning edit' idPedido='{$item["idPedido"]}'><i class='fas fa-pen'></i></a>";
-        $botones .= "<button class='btn btn-info detalle' idPedido='{$item["idPedido"]}'><i class='fas fa-info'></i></button>";
+        $botones .= "<a href='" . URL . "/main/pdf?idPedido=$item[idPedido]' target='_blank' class='btn btn-danger'><i class='fas fa-file-pdf'></i></a>";
 
         $arrEstado = [
           "0" => [

@@ -56,6 +56,22 @@ class Cliente extends Session
       $this->response(["error" => "Faltan parametros"]);
     }
 
+    if (!preg_match("/^[0-9]+$/", $_POST['documento']) || !preg_match("/^[0-9]+$/", $_POST['telefono'])) {
+      $this->response(["error" => "Documento o télefono deben ser números"]);
+    }
+
+    if (!filter_var($_POST['email'], FILTER_VALIDATE_EMAIL)) {
+      $this->response(["error" => "Ingrese un email valido"]);
+    }
+
+    if (!preg_match("/^[a-zA-Z ]+$/", $_POST['nombre'])) {
+      $this->response(["error" => "Nombre debe ser letras"]);
+    }
+
+    if (!preg_match("/^[a-zA-Z0-9.-_ ]+$/", $_POST['direccion'])) {
+      $this->response(["error" => "Dirección debe ser: letras, números y . - _"]);
+    }
+
     $this->model->documento = $this->getPost('documento');
     $this->model->nombres = $this->getPost('nombres');
     $this->model->email = $this->getPost('email');
@@ -89,13 +105,28 @@ class Cliente extends Session
       $this->response(["error" => "Faltan parametros"]);
     }
 
+    if (!preg_match("/^[0-9]+$/", $_POST['documento']) || !preg_match("/^[0-9]+$/", $_POST['telefono'])) {
+      $this->response(["error" => "Documento o télefono deben ser números"]);
+    }
+
+    if (!filter_var($_POST['email'], FILTER_VALIDATE_EMAIL)) {
+      $this->response(["error" => "Ingrese un email valido"]);
+    }
+
+    if (!preg_match("/^[a-zA-Z ]+$/", $_POST['nombre'])) {
+      $this->response(["error" => "Nombre debe ser letras"]);
+    }
+
+    if (!preg_match("/^[a-zA-Z0-9.-_ ]+$/", $_POST['direccion'])) {
+      $this->response(["error" => "Dirección debe ser: letras, números y . - _"]);
+    }
+
     $this->model->idCliente = $this->getPost('idcliente');
     $this->model->documento = $this->getPost('documento');
     $this->model->nombres = $this->getPost('nombres');
     $this->model->email = $this->getPost('email');
     $this->model->telefono = $this->getPost('telefono');
     $this->model->direccion = $this->getPost('direccion');
-
 
     if ($this->model->update()) {
 

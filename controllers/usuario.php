@@ -3,6 +3,7 @@
 namespace Controllers;
 
 use Libs\Session;
+use Models\TipoUsuarioModel;
 use Models\UsuarioModel;
 
 class Usuario extends Session
@@ -17,7 +18,8 @@ class Usuario extends Session
 
   public function render()
   {
-    $this->view->render('usuario/index');
+    $tipos = new TipoUsuarioModel();
+    $this->view->render('usuario/index', ["tipos" => $tipos->getAll()]);
   }
 
   public function list()
@@ -56,6 +58,22 @@ class Usuario extends Session
       $this->response(["error" => "Faltan parametros"]);
     }
 
+    if (!preg_match("/^[0-9]+$/", $_POST['telefono'])) {
+      $this->response(["error" => "Documento o télefono deben ser números"]);
+    }
+
+    if (!filter_var($_POST['email'], FILTER_VALIDATE_EMAIL)) {
+      $this->response(["error" => "Ingrese un email valido"]);
+    }
+
+    if (!preg_match("/^[a-zA-Z ]+$/", $_POST['nombres'])) {
+      $this->response(["error" => "Nombre debe ser letras"]);
+    }
+
+    if (!preg_match("/^[a-zA-Z0-9.-_ ]+$/", $_POST['direccion'])) {
+      $this->response(["error" => "Dirección debe ser: letras, números y . - _"]);
+    }
+
     $this->model->idtipo = $this->getPost('tipo');
     $this->model->nombres = $this->getPost('nombres');
     $this->model->email = $this->getPost('email');
@@ -87,6 +105,22 @@ class Usuario extends Session
   {
     if (!$this->existsPOST(['idUsuario', 'tipo', 'nombres', 'email', 'telefono'])) {
       $this->response(["error" => "Faltan parametros"]);
+    }
+
+    if (!preg_match("/^[0-9]+$/", $_POST['telefono'])) {
+      $this->response(["error" => "Documento o télefono deben ser números"]);
+    }
+
+    if (!filter_var($_POST['email'], FILTER_VALIDATE_EMAIL)) {
+      $this->response(["error" => "Ingrese un email valido"]);
+    }
+
+    if (!preg_match("/^[a-zA-Z ]+$/", $_POST['nombres'])) {
+      $this->response(["error" => "Nombre debe ser letras"]);
+    }
+
+    if (!preg_match("/^[a-zA-Z0-9.-_ ]+$/", $_POST['direccion'])) {
+      $this->response(["error" => "Dirección debe ser: letras, números y . - _"]);
     }
 
     $this->model->idUsuario = $this->getPost('idUsuario');

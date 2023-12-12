@@ -15,8 +15,7 @@
             <div class="card-header">
               <h4>Mantenimiento de usuarios</h4>
 
-              <button type="button" class="btn btn-primary" id="add_usuario" data-toggle="modal"
-                data-target="#modal_usuario">
+              <button type="button" class="btn btn-primary" id="add_usuario" data-toggle="modal" data-target="#modal_usuario">
                 <i class="fa fa-plus"></i> Agregar</button>
             </div>
             <div class="card-body">
@@ -44,8 +43,7 @@
     </div>
   </section>
 
-  <div class="modal fade" id="modal_usuario" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-    aria-hidden="true">
+  <div class="modal fade" id="modal_usuario" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
@@ -61,8 +59,7 @@
 
             <div class="form-group">
               <label for="nombres">Nombres</label>
-              <input type="text" id="nombres" name="nombres" class="form-control" pattern="[A-Za-záéíóúÁÉÍÓÚñÑ ]+"
-                required>
+              <input type="text" id="nombres" name="nombres" class="form-control" pattern="[A-Za-záéíóúÁÉÍÓÚñÑ ]+" required>
               <div class="invalid-feedback">
                 Oh no! Nombres is invalid.
               </div>
@@ -88,12 +85,10 @@
               <label for="tipo">Tipo</label>
               <select id="tipo" name="tipo" class="form-control" required>
                 <option value="" selected disabled>__ Seleccione __</option>
-                <option value="1">Administrador</option>
-                <option value="2">Secretaria</option>
                 <?php
-                // foreach ($this->d['tipos'] as $tipo) {
-                //   echo "<option value='{$tipo['id']}'>{$tipo['tipo']}</option>";
-                // }
+                foreach ($this->d['tipos'] as $tipo) {
+                  echo "<option value='{$tipo['idTipo']}'>{$tipo['nombre']}</option>";
+                }
                 ?>
               </select>
               <div class="invalid-feedback">

@@ -23,7 +23,8 @@ class Delivery extends Session
 
     if (count($deliverys) > 0) {
       foreach ($deliverys as $delivery) {
-        $botones = "<button class='btn btn-info detalle' idDelivery='{$delivery["idDelivery"]}'><i class='fas fa-info'></i></button>";
+        $url = URL;
+        $botones = "<a href='$url/main/pdf?idPedido=$delivery[idpedido]' target='_blank' class='btn btn-danger'><i class='fas fa-file-pdf'></i></a>";
 
         $data[] = [
           $delivery["idDelivery"],

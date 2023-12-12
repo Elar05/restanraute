@@ -4,6 +4,7 @@ namespace Controllers;
 
 use Libs\Session;
 use Models\MainModel;
+use Models\PedidoModel;
 
 class Main extends Session
 {
@@ -66,5 +67,18 @@ class Main extends Session
     }
 
     $this->response(["series" => $series, "labels" => $labels]);
+  }
+
+  public function pdf()
+  {
+    if (!$this->existsGET(['idPedido'])) {
+      $this->redirect('main', ["mensaje" => "No existe el pedido"]);
+    }
+
+    $pedido = new PedidoModel();
+
+    $this->view->render('main/pdf', [
+      "pedido" => $pedido->get($_GET['idPedido']),
+    ]);
   }
 }

@@ -52,6 +52,10 @@ class Pago extends Session
             $this->response(["error" => "Faltan parametros"]);
         }
 
+        if (!preg_match("/^[a-zA-Z ]+$/", $_POST['nombre'])) {
+            $this->response(["error" => "Nombre debe ser letras"]);
+        }
+
         $this->model->nombre = $this->getPost('nombre');
 
         if ($this->model->save()) {
@@ -78,6 +82,10 @@ class Pago extends Session
     {
         if (!$this->existsPOST(['idPago', 'nombre'])) {
             $this->response(["error" => "Faltan parametros"]);
+        }
+
+        if (!preg_match("/^[a-zA-Z ]+$/", $_POST['nombre'])) {
+            $this->response(["error" => "Nombre debe ser letras"]);
         }
 
         $this->model->idPago = $this->getPost('idPago');

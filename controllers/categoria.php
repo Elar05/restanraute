@@ -51,8 +51,11 @@ class Categoria extends Session
       $this->response(["error" => "Faltan parametros"]);
     }
 
-    $this->model->nombre = $this->getPost('nombre');
+    if (!preg_match("/^[a-zA-Z ]+$/", $_POST['nombre'])) {
+      $this->response(["error" => "La categoria debe ser letras"]);
+    }
 
+    $this->model->nombre = $this->getPost('nombre');
 
     if ($this->model->save()) {
       $this->response(["success" => "categoria registrado"]);
@@ -75,18 +78,19 @@ class Categoria extends Session
 
   public function edit()
   {
-    if (!$this->existsPOST(['idcategoria','nombre'])) {
+    if (!$this->existsPOST(['idcategoria', 'nombre'])) {
       $this->response(["error" => "Faltan parametros"]);
+    }
+
+    if (!preg_match("/^[a-zA-Z ]+$/", $_POST['nombre'])) {
+      $this->response(["error" => "La categoria debe ser letras"]);
     }
 
     $this->model->idCategoria = $this->getPost('idcategoria');
 
     $this->model->nombre = $this->getPost('nombre');
 
-
     if ($this->model->update()) {
-       
-
       $this->response(["success" => "categoria actualizado"]);
     }
 

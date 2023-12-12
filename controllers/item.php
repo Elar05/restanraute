@@ -77,6 +77,18 @@ class Item extends Session
       $this->response(["error" => "Faltan parametros"]);
     }
 
+    if (!is_numeric($_POST['precio_c']) || !is_numeric($_POST['precio_v'])) {
+      $this->response(["error" => "Precio Venta y Compra debe ser número y/o decimales"]);
+    }
+
+    if (!preg_match("/^[0-9]+$/", $_POST['stock']) || !preg_match("/^[0-9]+$/", $_POST['stock_min'])) {
+      $this->response(["error" => "Stock debe ser número"]);
+    }
+
+    if (!preg_match("/^[a-zA-Z0-9 ]+$/", $_POST['descripcion'])) {
+      $this->response(["error" => "Descripción debe ser: letras, y/o números"]);
+    }
+
     $urlFoto = "";
     if (!empty($_FILES["foto"]['name'])) {
       $foto = $_FILES["foto"];
@@ -127,6 +139,18 @@ class Item extends Session
   {
     if (!$this->existsPOST(['idItem', 'idcategoria', 'tipo', 'precio_c', 'precio_v', 'stock', 'stock_min', 'descripcion'])) {
       $this->response(["error" => "Faltan parametros"]);
+    }
+
+    if (!is_numeric($_POST['precio_c']) || !is_numeric($_POST['precio_v'])) {
+      $this->response(["error" => "Precio Venta y Compra debe ser número y/o decimales"]);
+    }
+
+    if (!preg_match("/^[0-9]+$/", $_POST['stock']) || !preg_match("/^[0-9]+$/", $_POST['stock_min'])) {
+      $this->response(["error" => "Stock debe ser número"]);
+    }
+
+    if (!preg_match("/^[a-zA-Z0-9 ]+$/", $_POST['descripcion'])) {
+      $this->response(["error" => "Descripción debe ser: letras, y/o números"]);
     }
 
     $urlFoto = $this->getPost('urlfoto');
