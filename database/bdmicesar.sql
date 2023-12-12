@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.2.1
+-- version 5.2.0
 -- https://www.phpmyadmin.net/
 --
--- Servidor: 127.0.0.1
--- Tiempo de generación: 26-11-2023 a las 03:25:16
--- Versión del servidor: 10.4.28-MariaDB
--- Versión de PHP: 8.2.4
+-- Servidor: 127.0.0.1:3306
+-- Tiempo de generación: 12-12-2023 a las 02:24:32
+-- Versión del servidor: 8.0.31
+-- Versión de PHP: 8.1.13
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -27,11 +27,26 @@ SET time_zone = "+00:00";
 -- Estructura de tabla para la tabla `categoria`
 --
 
-CREATE TABLE `categoria` (
-  `idCategoria` int(11) NOT NULL,
-  `nombre` varchar(20) NOT NULL,
-  `estado` char(1) NOT NULL DEFAULT '1'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+DROP TABLE IF EXISTS `categoria`;
+CREATE TABLE IF NOT EXISTS `categoria` (
+  `idCategoria` int NOT NULL AUTO_INCREMENT,
+  `nombre` varchar(20) COLLATE utf8mb4_general_ci NOT NULL,
+  `estado` char(1) COLLATE utf8mb4_general_ci NOT NULL DEFAULT '1',
+  PRIMARY KEY (`idCategoria`)
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `categoria`
+--
+
+INSERT INTO `categoria` (`idCategoria`, `nombre`, `estado`) VALUES
+(1, 'Bebidas', '1'),
+(2, 'Postres', '1'),
+(3, 'Entradas', '1'),
+(4, 'Segundos', '1'),
+(5, 'Piqueos', '1'),
+(6, 'ad', '1'),
+(7, 'asdf adf', '1');
 
 -- --------------------------------------------------------
 
@@ -39,14 +54,29 @@ CREATE TABLE `categoria` (
 -- Estructura de tabla para la tabla `cliente`
 --
 
-CREATE TABLE `cliente` (
-  `idCliente` int(11) NOT NULL,
-  `nombres` varchar(80) NOT NULL,
-  `email` varchar(100) NOT NULL,
-  `telefono` varchar(9) NOT NULL,
-  `direccion` varchar(100) NOT NULL,
-  `estado` char(1) NOT NULL DEFAULT '1'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+DROP TABLE IF EXISTS `cliente`;
+CREATE TABLE IF NOT EXISTS `cliente` (
+  `idCliente` int NOT NULL AUTO_INCREMENT,
+  `nombres` varchar(80) COLLATE utf8mb4_general_ci NOT NULL,
+  `email` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
+  `telefono` varchar(9) COLLATE utf8mb4_general_ci NOT NULL,
+  `direccion` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
+  `estado` char(1) COLLATE utf8mb4_general_ci NOT NULL DEFAULT '1',
+  `documento` varchar(8) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  PRIMARY KEY (`idCliente`)
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `cliente`
+--
+
+INSERT INTO `cliente` (`idCliente`, `nombres`, `email`, `telefono`, `direccion`, `estado`, `documento`) VALUES
+(1, 'Daniel', 'elar@elar.com', '519805026', 'afunn', '1', '65798789'),
+(2, 'Daniel', 'elar@elar.com', '519805026', 'afunn', '1', '85219752'),
+(3, 'Daniel', 'elar@elar.com', '519805026', 'afunn', '1', '96387542'),
+(4, 'Daniel', 'elar@elar.com', '519805026', 'afunn', '1', '89764513'),
+(5, 'Daniel', 'elar@elar.com', '519805026', 'afunn', '1', '65846555'),
+(6, 'Daniel', 'elar@elar.com', '519805026', 'afunn', '1', '12345678');
 
 -- --------------------------------------------------------
 
@@ -54,16 +84,25 @@ CREATE TABLE `cliente` (
 -- Estructura de tabla para la tabla `delivery`
 --
 
-CREATE TABLE `delivery` (
-  `idDelivery` int(11) NOT NULL,
-  `idpedido` int(11) NOT NULL,
-  `idventa` int(11) NOT NULL,
-  `ciudad` varchar(30) NOT NULL,
-  `direccion` varchar(100) NOT NULL,
+DROP TABLE IF EXISTS `delivery`;
+CREATE TABLE IF NOT EXISTS `delivery` (
+  `idDelivery` int NOT NULL AUTO_INCREMENT,
+  `idpedido` int NOT NULL,
+  `ciudad` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `direccion` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
   `costo` decimal(10,2) NOT NULL,
-  `fecha` datetime NOT NULL DEFAULT current_timestamp(),
-  `estado` char(1) NOT NULL DEFAULT '0'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  `fecha` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `estado` char(1) COLLATE utf8mb4_general_ci NOT NULL DEFAULT '0',
+  PRIMARY KEY (`idDelivery`),
+  KEY `fk_pedido_delivery` (`idpedido`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `delivery`
+--
+
+INSERT INTO `delivery` (`idDelivery`, `idpedido`, `ciudad`, `direccion`, `costo`, `fecha`, `estado`) VALUES
+(3, 15, NULL, 'Castilla', '20.00', '2023-12-10 21:27:39', '0');
 
 -- --------------------------------------------------------
 
@@ -71,13 +110,26 @@ CREATE TABLE `delivery` (
 -- Estructura de tabla para la tabla `detalle`
 --
 
-CREATE TABLE `detalle` (
-  `idpedido` int(11) NOT NULL,
-  `iditem` int(11) NOT NULL,
+DROP TABLE IF EXISTS `detalle`;
+CREATE TABLE IF NOT EXISTS `detalle` (
+  `idpedido` int NOT NULL,
+  `iditem` int NOT NULL,
   `costo` decimal(10,2) NOT NULL,
-  `cantidad` int(11) NOT NULL,
-  `subtotal` decimal(10,2) GENERATED ALWAYS AS ('precio_v * cantidad') VIRTUAL
+  `cantidad` int NOT NULL,
+  `subtotal` decimal(10,2) GENERATED ALWAYS AS ((`costo` * `cantidad`)) VIRTUAL NOT NULL,
+  KEY `fk_pedido_detalle` (`idpedido`),
+  KEY `fk_item_detalle` (`iditem`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `detalle`
+--
+
+INSERT INTO `detalle` (`idpedido`, `iditem`, `costo`, `cantidad`) VALUES
+(14, 1, '15.00', 2),
+(14, 2, '20.00', 1),
+(15, 2, '20.00', 1),
+(15, 1, '15.00', 1);
 
 -- --------------------------------------------------------
 
@@ -85,19 +137,31 @@ CREATE TABLE `detalle` (
 -- Estructura de tabla para la tabla `item`
 --
 
-CREATE TABLE `item` (
-  `idItem` int(11) NOT NULL,
-  `idcategoria` int(11) NOT NULL,
-  `tipo` enum('Producto','Plato') NOT NULL,
+DROP TABLE IF EXISTS `item`;
+CREATE TABLE IF NOT EXISTS `item` (
+  `idItem` int NOT NULL AUTO_INCREMENT,
+  `idcategoria` int NOT NULL,
+  `tipo` enum('Producto','Plato') COLLATE utf8mb4_general_ci NOT NULL,
   `precio_c` decimal(10,2) NOT NULL,
   `precio_v` decimal(10,2) NOT NULL,
-  `stock` int(11) NOT NULL,
-  `stock_min` int(11) NOT NULL,
-  `foto` varchar(200) NOT NULL,
-  `descripcion` varchar(100) DEFAULT NULL,
-  `f_registro` datetime NOT NULL DEFAULT current_timestamp(),
-  `estado` char(1) NOT NULL DEFAULT '1'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  `stock` int NOT NULL,
+  `stock_min` int NOT NULL,
+  `foto` varchar(200) COLLATE utf8mb4_general_ci NOT NULL,
+  `descripcion` varchar(100) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `f_registro` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `estado` char(1) COLLATE utf8mb4_general_ci NOT NULL DEFAULT '1',
+  PRIMARY KEY (`idItem`),
+  KEY `fk_item_category` (`idcategoria`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `item`
+--
+
+INSERT INTO `item` (`idItem`, `idcategoria`, `tipo`, `precio_c`, `precio_v`, `stock`, `stock_min`, `foto`, `descripcion`, `f_registro`, `estado`) VALUES
+(1, 1, 'Producto', '10.00', '15.00', 100, 0, '', 'cusqueña', '2023-12-02 16:40:54', '1'),
+(2, 2, 'Producto', '10.00', '20.00', 50, 0, '', '3 leches', '2023-12-02 16:41:31', '1'),
+(3, 1, 'Producto', '1.00', '1.00', 1, 1, '', '1', '2023-12-11 20:39:15', '1');
 
 -- --------------------------------------------------------
 
@@ -105,11 +169,23 @@ CREATE TABLE `item` (
 -- Estructura de tabla para la tabla `pago`
 --
 
-CREATE TABLE `pago` (
-  `idPago` int(11) NOT NULL,
-  `nombre` varchar(20) NOT NULL,
-  `estado` char(1) NOT NULL DEFAULT '1'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+DROP TABLE IF EXISTS `pago`;
+CREATE TABLE IF NOT EXISTS `pago` (
+  `idPago` int NOT NULL AUTO_INCREMENT,
+  `nombre` varchar(20) COLLATE utf8mb4_general_ci NOT NULL,
+  `estado` char(1) COLLATE utf8mb4_general_ci NOT NULL DEFAULT '1',
+  PRIMARY KEY (`idPago`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `pago`
+--
+
+INSERT INTO `pago` (`idPago`, `nombre`, `estado`) VALUES
+(1, 'Efectivo', '1'),
+(2, 'Transferencia', '1'),
+(3, 'Yape', '1'),
+(4, 'Plin', '1');
 
 -- --------------------------------------------------------
 
@@ -117,29 +193,70 @@ CREATE TABLE `pago` (
 -- Estructura de tabla para la tabla `pedido`
 --
 
-CREATE TABLE `pedido` (
-  `idPedido` int(11) NOT NULL,
-  `idcliente` int(11) NOT NULL,
-  `idusuario` int(11) NOT NULL,
-  `tipo` enum('delivery','reserva','local') NOT NULL,
+DROP TABLE IF EXISTS `pedido`;
+CREATE TABLE IF NOT EXISTS `pedido` (
+  `idPedido` int NOT NULL AUTO_INCREMENT,
+  `idcliente` int NOT NULL,
+  `idusuario` int NOT NULL,
+  `tipo` enum('delivery','reserva','local') COLLATE utf8mb4_general_ci NOT NULL,
   `total` decimal(10,2) NOT NULL,
-  `fecha` datetime NOT NULL DEFAULT current_timestamp(),
-  `estado` char(1) NOT NULL DEFAULT '0'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  `fecha` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `estado` char(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '1',
+  PRIMARY KEY (`idPedido`),
+  KEY `fk_pedido_cliente` (`idcliente`),
+  KEY `fk_pedido_usuario` (`idusuario`)
+) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `pedido`
+--
+
+INSERT INTO `pedido` (`idPedido`, `idcliente`, `idusuario`, `tipo`, `total`, `fecha`, `estado`) VALUES
+(14, 6, 1, 'local', '50.00', '2023-12-10 15:31:40', '1'),
+(15, 6, 1, 'delivery', '35.00', '2023-12-10 21:27:39', '1');
 
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `reserva`
+-- Estructura de tabla para la tabla `permisos`
 --
 
-CREATE TABLE `reserva` (
-  `idReserva` int(11) NOT NULL,
-  `idpedido` int(11) NOT NULL,
-  `costo` decimal(10,2) NOT NULL,
-  `fecha` datetime NOT NULL DEFAULT current_timestamp(),
-  `estado` char(1) NOT NULL DEFAULT '0'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+DROP TABLE IF EXISTS `permisos`;
+CREATE TABLE IF NOT EXISTS `permisos` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `idvista` int NOT NULL,
+  `idtipousuario` int NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM AUTO_INCREMENT=27 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Volcado de datos para la tabla `permisos`
+--
+
+INSERT INTO `permisos` (`id`, `idvista`, `idtipousuario`) VALUES
+(1, 1, 1),
+(2, 2, 1),
+(3, 3, 1),
+(9, 4, 1),
+(10, 10, 1),
+(6, 6, 1),
+(7, 7, 1),
+(8, 11, 1),
+(11, 8, 1),
+(13, 5, 1),
+(14, 12, 1),
+(15, 13, 1),
+(16, 14, 1),
+(17, 15, 1),
+(18, 1, 2),
+(19, 2, 2),
+(20, 3, 2),
+(21, 12, 2),
+(22, 13, 2),
+(23, 14, 2),
+(24, 5, 2),
+(25, 8, 2),
+(26, 15, 2);
 
 -- --------------------------------------------------------
 
@@ -147,11 +264,21 @@ CREATE TABLE `reserva` (
 -- Estructura de tabla para la tabla `tipousuario`
 --
 
-CREATE TABLE `tipousuario` (
-  `idTipo` int(11) NOT NULL,
-  `nombre` int(11) NOT NULL,
-  `estado` char(1) NOT NULL DEFAULT '1'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+DROP TABLE IF EXISTS `tipousuario`;
+CREATE TABLE IF NOT EXISTS `tipousuario` (
+  `idTipo` int NOT NULL AUTO_INCREMENT,
+  `nombre` varchar(50) COLLATE utf8mb4_general_ci NOT NULL,
+  `estado` char(1) COLLATE utf8mb4_general_ci NOT NULL DEFAULT '1',
+  PRIMARY KEY (`idTipo`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `tipousuario`
+--
+
+INSERT INTO `tipousuario` (`idTipo`, `nombre`, `estado`) VALUES
+(1, 'Admin', '1'),
+(2, 'Empleado', '1');
 
 -- --------------------------------------------------------
 
@@ -159,16 +286,28 @@ CREATE TABLE `tipousuario` (
 -- Estructura de tabla para la tabla `usuario`
 --
 
-CREATE TABLE `usuario` (
-  `idUsuario` int(11) NOT NULL,
-  `idtipo` int(11) NOT NULL,
-  `nombres` varchar(50) NOT NULL,
-  `email` varchar(200) NOT NULL,
-  `password` varchar(100) NOT NULL,
-  `telefono` varchar(15) NOT NULL,
-  `direccion` varchar(100) NOT NULL,
-  `estado` char(1) NOT NULL DEFAULT '1'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+DROP TABLE IF EXISTS `usuario`;
+CREATE TABLE IF NOT EXISTS `usuario` (
+  `idUsuario` int NOT NULL AUTO_INCREMENT,
+  `idtipo` int NOT NULL,
+  `nombres` varchar(50) COLLATE utf8mb4_general_ci NOT NULL,
+  `email` varchar(200) COLLATE utf8mb4_general_ci NOT NULL,
+  `password` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
+  `telefono` varchar(15) COLLATE utf8mb4_general_ci NOT NULL,
+  `direccion` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
+  `estado` char(1) COLLATE utf8mb4_general_ci NOT NULL DEFAULT '1',
+  PRIMARY KEY (`idUsuario`),
+  KEY `fk_usuario_tipo` (`idtipo`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `usuario`
+--
+
+INSERT INTO `usuario` (`idUsuario`, `idtipo`, `nombres`, `email`, `password`, `telefono`, `direccion`, `estado`) VALUES
+(1, 1, 'Elar', 'elar@elar.com', '$2y$10$v6ANqw2ZUyUrv7SUKMuVluReGRGM9Ph4pMLjG.Uu3sLBnC8C/OtHK', '987654321', 'Piura', '1'),
+(2, 1, 'Danieladfasdf', 'daniel@daniel.com', '$2y$10$5hGbotW.kl.HZyhcUqc4guVThQLc2/93xceVocjKU7AKuQLaCBt0C', '986574123', 'Ayacucho', '1'),
+(3, 2, 'Empleado', 'empleado@gmail.com', '$2y$10$rh0dOvlk1YI45s7sEM4CoOsneSN/P7eTZV2VTQgsPkv8F3CTIxSSe', '51980502603', 'Piura', '1');
 
 -- --------------------------------------------------------
 
@@ -176,152 +315,108 @@ CREATE TABLE `usuario` (
 -- Estructura de tabla para la tabla `venta`
 --
 
-CREATE TABLE `venta` (
-  `idventa` int(11) NOT NULL,
-  `idpedido` int(11) NOT NULL,
-  `idpago` int(11) NOT NULL,
-  `comprobante` enum('B','F') NOT NULL,
-  `descripcion` varchar(500) DEFAULT NULL,
+DROP TABLE IF EXISTS `venta`;
+CREATE TABLE IF NOT EXISTS `venta` (
+  `idventa` int NOT NULL AUTO_INCREMENT,
+  `idpedido` int NOT NULL,
+  `idpago` int NOT NULL,
+  `comprobante` enum('B','F') COLLATE utf8mb4_general_ci NOT NULL,
+  `descripcion` varchar(500) COLLATE utf8mb4_general_ci DEFAULT NULL,
   `subtotal` decimal(10,0) NOT NULL,
   `igv` decimal(10,0) NOT NULL,
   `total` decimal(10,0) NOT NULL,
-  `fecha` date NOT NULL,
-  `estado` char(10) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  `fecha` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `estado` char(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '1',
+  `serie` enum('B001','F001') CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `correlativo` int NOT NULL,
+  PRIMARY KEY (`idventa`),
+  KEY `fk_venta_pedido` (`idpedido`),
+  KEY `fk_venta_pago` (`idpago`)
+) ENGINE=InnoDB AUTO_INCREMENT=1006 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Índices para tablas volcadas
+-- Volcado de datos para la tabla `venta`
+--
+
+INSERT INTO `venta` (`idventa`, `idpedido`, `idpago`, `comprobante`, `descripcion`, `subtotal`, `igv`, `total`, `fecha`, `estado`, `serie`, `correlativo`) VALUES
+(1004, 14, 1, 'B', 'a', '41', '9', '50', '2023-12-10 15:31:40', '1', 'B001', 1),
+(1005, 15, 1, 'B', 'a', '29', '6', '35', '2023-12-10 21:27:39', '1', 'B001', 2);
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `vistas`
+--
+
+DROP TABLE IF EXISTS `vistas`;
+CREATE TABLE IF NOT EXISTS `vistas` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `nombre` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM AUTO_INCREMENT=16 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Volcado de datos para la tabla `vistas`
+--
+
+INSERT INTO `vistas` (`id`, `nombre`) VALUES
+(1, 'main'),
+(2, 'logout'),
+(3, 'cliente'),
+(4, 'usuario'),
+(5, 'venta'),
+(6, 'permiso'),
+(7, 'vista'),
+(8, 'delivery'),
+(11, 'tipousuario'),
+(10, 'reserva'),
+(12, 'pedido'),
+(13, 'item'),
+(14, 'categoria'),
+(15, 'pago');
+
+--
+-- Restricciones para tablas volcadas
 --
 
 --
--- Indices de la tabla `categoria`
---
-ALTER TABLE `categoria`
-  ADD PRIMARY KEY (`idCategoria`);
-
---
--- Indices de la tabla `cliente`
---
-ALTER TABLE `cliente`
-  ADD PRIMARY KEY (`idCliente`);
-
---
--- Indices de la tabla `delivery`
+-- Filtros para la tabla `delivery`
 --
 ALTER TABLE `delivery`
-  ADD PRIMARY KEY (`idDelivery`);
+  ADD CONSTRAINT `fk_pedido_delivery` FOREIGN KEY (`idpedido`) REFERENCES `pedido` (`idPedido`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Indices de la tabla `detalle`
+-- Filtros para la tabla `detalle`
 --
 ALTER TABLE `detalle`
-  ADD PRIMARY KEY (`idpedido`);
+  ADD CONSTRAINT `fk_item_detalle` FOREIGN KEY (`iditem`) REFERENCES `item` (`idItem`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `fk_pedido_detalle` FOREIGN KEY (`idpedido`) REFERENCES `pedido` (`idPedido`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Indices de la tabla `item`
+-- Filtros para la tabla `item`
 --
 ALTER TABLE `item`
-  ADD PRIMARY KEY (`idItem`);
+  ADD CONSTRAINT `fk_item_category` FOREIGN KEY (`idcategoria`) REFERENCES `categoria` (`idCategoria`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Indices de la tabla `pago`
---
-ALTER TABLE `pago`
-  ADD PRIMARY KEY (`idPago`);
-
---
--- Indices de la tabla `pedido`
+-- Filtros para la tabla `pedido`
 --
 ALTER TABLE `pedido`
-  ADD PRIMARY KEY (`idPedido`);
+  ADD CONSTRAINT `fk_pedido_cliente` FOREIGN KEY (`idcliente`) REFERENCES `cliente` (`idCliente`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `fk_pedido_usuario` FOREIGN KEY (`idusuario`) REFERENCES `usuario` (`idUsuario`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Indices de la tabla `reserva`
---
-ALTER TABLE `reserva`
-  ADD PRIMARY KEY (`idReserva`);
-
---
--- Indices de la tabla `tipousuario`
---
-ALTER TABLE `tipousuario`
-  ADD PRIMARY KEY (`idTipo`);
-
---
--- Indices de la tabla `usuario`
+-- Filtros para la tabla `usuario`
 --
 ALTER TABLE `usuario`
-  ADD PRIMARY KEY (`idUsuario`);
+  ADD CONSTRAINT `fk_usuario_tipo` FOREIGN KEY (`idtipo`) REFERENCES `tipousuario` (`idTipo`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Indices de la tabla `venta`
+-- Filtros para la tabla `venta`
 --
 ALTER TABLE `venta`
-  ADD PRIMARY KEY (`idventa`);
-
---
--- AUTO_INCREMENT de las tablas volcadas
---
-
---
--- AUTO_INCREMENT de la tabla `categoria`
---
-ALTER TABLE `categoria`
-  MODIFY `idCategoria` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT de la tabla `cliente`
---
-ALTER TABLE `cliente`
-  MODIFY `idCliente` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT de la tabla `detalle`
---
-ALTER TABLE `detalle`
-  MODIFY `idpedido` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT de la tabla `item`
---
-ALTER TABLE `item`
-  MODIFY `idItem` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT de la tabla `pago`
---
-ALTER TABLE `pago`
-  MODIFY `idPago` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT de la tabla `pedido`
---
-ALTER TABLE `pedido`
-  MODIFY `idPedido` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT de la tabla `reserva`
---
-ALTER TABLE `reserva`
-  MODIFY `idReserva` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT de la tabla `tipousuario`
---
-ALTER TABLE `tipousuario`
-  MODIFY `idTipo` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT de la tabla `usuario`
---
-ALTER TABLE `usuario`
-  MODIFY `idUsuario` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT de la tabla `venta`
---
-ALTER TABLE `venta`
-  MODIFY `idventa` int(11) NOT NULL AUTO_INCREMENT;
+  ADD CONSTRAINT `fk_venta_pago` FOREIGN KEY (`idpago`) REFERENCES `pago` (`idPago`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `fk_venta_pedido` FOREIGN KEY (`idpedido`) REFERENCES `pedido` (`idPedido`) ON DELETE CASCADE ON UPDATE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
